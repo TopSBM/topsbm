@@ -4,9 +4,8 @@
 Provides a Scikit-Learn extension for implementing hSBM.
 
 ## Important Links
-HTML Documentation - http://contrib.scikit-learn.org/project-template/
+HTML Documentation - To be added
 
 ## Installation and Usage
+To be added
 
-
-*Thank you for cleanly contributing to the scikit-learn ecosystem!*
