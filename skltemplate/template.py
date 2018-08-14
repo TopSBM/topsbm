@@ -8,7 +8,7 @@ from sklearn.utils.multiclass import unique_labels
 from sklearn.metrics import euclidean_distances
 
 
-class TemplateEstimator(BaseEstimator):
+class hSBMEstimator(BaseEstimator):
     """ A template estimator to be used as a reference implementation .
 
     Parameters
@@ -56,8 +56,8 @@ class TemplateEstimator(BaseEstimator):
         return X[:, 0]**2
 
 
-class TemplateClassifier(BaseEstimator, ClassifierMixin):
-    """ An example classifier which implements a 1-NN algorithm.
+class hSBMClassifier(BaseEstimator, ClassifierMixin):
+    """ TO Edit from here and all that follows.
 
     Parameters
     ----------
@@ -123,7 +123,7 @@ class TemplateClassifier(BaseEstimator, ClassifierMixin):
         return self.y_[closest]
 
 
-class TemplateTransformer(BaseEstimator, TransformerMixin):
+class hSBMTransformer(BaseEstimator, TransformerMixin):
     """ An example transformer that returns the element-wise square root..
 
     Parameters
