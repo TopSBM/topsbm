@@ -1,5 +1,5 @@
 """
-This is a module to be used as a reference for building other modules
+This is the mail file for implementing the hSBM for text mining.
 """
 import numpy as np
 from sklearn.base import BaseEstimator, ClassifierMixin, TransformerMixin
