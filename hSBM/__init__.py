@@ -1,6 +1,4 @@
-from .template import (TemplateEstimator, TemplateClassifier,
-                       TemplateTransformer)
-from . import template
+from .hSBM import (hSBMTransformer)
+#from . import template Joel: check if this needed.
 
-__all__ = ['TemplateEstimator', 'TemplateClassifier',
-           'TemplateTransformer', 'template']
+__all__ = ['hSBMTransformer']
