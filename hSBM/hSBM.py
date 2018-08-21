@@ -40,9 +40,10 @@ class hSBMTransformer(BaseEstimator, TransformerMixin):
         self : object
             Returns self.
         """
-        X = check_array(X)
-
-        self.input_shape_ = X.shape
+        #X = check_array(X)
+        #self.input_shape_ = X.shape
+        
+        print("Hello I am in hSBMTransformer:fit()")
 
         # Return the transformer
         return self
@@ -62,14 +63,18 @@ class hSBMTransformer(BaseEstimator, TransformerMixin):
             in `X`
         """
         # Check is fit had been called
-        check_is_fitted(self, ['input_shape_'])
+        #check_is_fitted(self, ['input_shape_'])
 
         # Input validation
-        X = check_array(X)
+        #X = check_array(X)
 
         # Check that the input is of the same shape as the one passed
         # during fit.
-        if X.shape != self.input_shape_:
-            raise ValueError('Shape of input is different from what was seen'
-                             'in `fit`')
-        return np.sqrt(X)
+        if 0:
+            if X.shape != self.input_shape_:
+                raise ValueError('Shape of input is different from what was seen'
+                                 'in `fit`')
+            
+        print("Hello I am in hSBMTransformer:transform()")
+        #return np.sqrt(X)
+        return np.sqrt(0)
