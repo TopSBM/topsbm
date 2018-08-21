@@ -15,8 +15,8 @@ env:
   matrix:
     - DISTRIB="conda" PYTHON_VERSION="2.7"
       NUMPY_VERSION="1.6.2" SCIPY_VERSION="0.11.0" CYTHON_VERSION="0.21"
-    - DISTRIB="conda" PYTHON_VERSION="3.5" COVERAGE="true"
-      NUMPY_VERSION="1.10.4" SCIPY_VERSION="0.17.0" CYTHON_VERSION="0.23.4"
+    - DISTRIB="conda" PYTHON_VERSION="3.6.4" COVERAGE="true"
+      NUMPY_VERSION="1.14.0" SCIPY_VERSION="1.0.0" CYTHON_VERSION="0.28.5"
 
 install: source ci_scripts/travis/install.sh
 script: bash ci_scripts/travis/test.sh
