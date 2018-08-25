@@ -23,30 +23,53 @@ class hSBMTransformer(BaseEstimator, TransformerMixin):
     """
     def __init__(self, demo_param='demo'):
         self.demo_param = demo_param
+        
+        ## VJ - Check if all this init are needed
+        ## Also need to add the relevant hyper-parameters.
+        
+        self.g = None ## network
 
+        self.words = [] ## list of word nodes
+        self.documents = [] ## list of document nodes
+
+        self.state = None ## inference state from graphtool
+        self.groups = {} ## results of group membership from inference
+        self.mdl = np.nan ## minimum description length of inferred state
+        self.L = np.nan ## number of levels in hierarchy
+
+    def __make_graph(self,documents = None, counts=True):
+        print('make_graph is private, need to be called from fit')
+          
+    
     def fit(self, X, y=None):
-        """A reference implementation of a fitting function for a transformer.
-
+        """Fit the hSBM topic model
+    
+        Constructs a graph representation of X, infers clustering, and reports
+        the cluster probability for each sample in X.
+    
         Parameters
         ----------
-        X : array-like or sparse matrix of shape = [n_samples, n_features]
-            The training input samples.
-        y : None
-            There is no need of a target in a transformer, yet the pipeline API
-            requires this parameter.
-
+        X : ndarray or sparse matrix of shape (n_samples, n_features)
+            Word frequencies for each document, represented as  non-negative
+            integers.
+        y : ignored
+    
         Returns
         -------
-        self : object
-            Returns self.
+        Xt : ndarray of shape (n_samples, n_components)
         """
         X = check_array(X)
         self.input_shape_ = X.shape
         
         print("Hello I am in hSBMTransformer:fit()")
-
-        # Return the transformer
+        
+    
+        # Return the transformer OR the matrix??
         return self
+    
+    
+    
+    
 
     def transform(self, X):
         """ A reference implementation of a transform function.
