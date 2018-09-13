@@ -15,94 +15,7 @@ from sklearn.utils.multiclass import unique_labels
 from sklearn.metrics import euclidean_distances
 
 ########### HELPER FUNCTIONS
-def get_V(self):
-    '''
-    return number of word-nodes == types
-    '''
-    return int(np.sum(self.g.vp['kind'].a==1))
-def get_D(self):
-    '''
-    return number of doc-nodes == number of documents
-    '''
-    return int(np.sum(self.g.vp['kind'].a==0)) 
-def get_N(self):
-    '''
-    return number of edges == tokens
-    '''
-    return int(self.g.num_edges())
-    
-def __get_groups(self,l=0):
-    '''
-    extract statistics on group membership of nodes form the inferred state.
-    return dictionary
-    - B_d, int, number of doc-groups
-    - B_w, int, number of word-groups
-    - p_tw_w, array B_w x V; word-group-membership:
-     prob that word-node w belongs to word-group tw: P(tw | w)
-    - p_td_d, array B_d x D; doc-group membership:
-     prob that doc-node d belongs to doc-group td: P(td | d)
-    - p_w_tw, array V x B_w; topic distribution:
-     prob of word w given topic tw P(w | tw)
-    - p_tw_d, array B_w x d; doc-topic mixtures:
-     prob of word-group tw in doc d P(tw | d)
-    '''
-    V = self.get_V()
-    D = self.get_D()
-    #N = self.get_N()
-    
-    g = self.g
-    state = self.state
-    state_l = state.project_level(l).copy(overlap=True)
-    state_l_edges = state_l.get_edge_blocks()
-    
-    ## count labeled half-edges, group-memberships
-    B = state_l.B
-    n_wb = np.zeros((V,B))
-    n_db = np.zeros((D,B))
-    n_dbw = np.zeros((D,B))
-    
-    for e in g.edges():
-        z1,z2 = state_l_edges[e]
-        v1 = e.source()
-        v2 = e.target()
-        n_db[int(v1),z1] += 1
-        n_dbw[int(v1),z2] += 1
-        n_wb[int(v2)-D,z2] += 1
-        
-    #p_w = np.sum(n_wb,axis=1)/float(np.sum(n_wb))
-    
-    ind_d = np.where(np.sum(n_db,axis=0)>0)[0]
-    Bd = len(ind_d)
-    n_db = n_db[:,ind_d]
-    
-    ind_w = np.where(np.sum(n_wb,axis=0)>0)[0]
-    Bw = len(ind_w)
-    n_wb = n_wb[:,ind_w]
-    
-    ind_w2 = np.where(np.sum(n_dbw,axis=0)>0)[0]
-    n_dbw = n_dbw[:,ind_w2]
-    
-    ## group-membership distributions
-    p_tw_w = (n_wb/np.sum(n_wb,axis=1)[:,np.newaxis]).T
-    
-    # group membership of each doc-node P(t_d | d)
-    p_td_d = (n_db/np.sum(n_db,axis=1)[:,np.newaxis]).T
-    
-    ## topic-distribution for words P(w | t_w)
-    p_w_tw = n_wb/np.sum(n_wb,axis=0)[np.newaxis,:]
-    
-    ## Mixture of word-groups into documetns P(t_w | d)
-    p_tw_d = (n_dbw/np.sum(n_dbw,axis=1)[:,np.newaxis]).T
-    
-    result = {}
-    result['Bd'] = Bd
-    result['Bw'] = Bw
-    result['p_tw_w'] = p_tw_w
-    result['p_td_d'] = p_td_d
-    result['p_w_tw'] = p_w_tw
-    result['p_tw_d'] = p_tw_d
-    
-    return result
+
 
 
 class hSBMTransformer(BaseEstimator, TransformerMixin):
@@ -209,8 +122,6 @@ class hSBMTransformer(BaseEstimator, TransformerMixin):
                 dict_groups_l = self.__get_groups(l=l)
                 dict_groups_L[l] = dict_groups_l
         self.groups = dict_groups_L
-        
-    # TODO: Import __get_groups
     
     def fit(self, X, y=None):
         """Fit the hSBM topic model
@@ -296,3 +207,76 @@ class hSBMTransformer(BaseEstimator, TransformerMixin):
             
         print("Hello I am in hSBMTransformer:transform()")
         return np.sqrt(X)
+        
+        
+    def __get_groups(self, l=0):
+        '''extract group membership statistics from the inferred state.
+        
+        return dictionary
+        - B_d, int, number of doc-groups
+        - B_w, int, number of word-groups
+        - p_tw_w, array B_w x V; word-group-membership:
+         prob that word-node w belongs to word-group tw: P(tw | w)
+        - p_td_d, array B_d x D; doc-group membership:
+         prob that doc-node d belongs to doc-group td: P(td | d)
+        - p_w_tw, array V x B_w; topic distribution:
+         prob of word w given topic tw P(w | tw)
+        - p_tw_d, array B_w x d; doc-topic mixtures:
+         prob of word-group tw in doc d P(tw | d)
+        '''
+        V = self.num_features_
+        D = self.num_samples_
+    
+        g = self.g
+        state = self.state
+        state_l = state.project_level(l).copy(overlap=True)
+        state_l_edges = state_l.get_edge_blocks()
+        
+        ## count labeled half-edges, group-memberships
+        B = state_l.B
+        n_wb = np.zeros((V, B))
+        n_db = np.zeros((D, B))
+        n_dbw = np.zeros((D, B))
+        
+        for e in g.edges():
+            z1,z2 = state_l_edges[e]
+            v1 = e.source()
+            v2 = e.target()
+            n_db[int(v1), z1] += 1
+            n_dbw[int(v1), z2] += 1
+            n_wb[int(v2) - D, z2] += 1
+            
+        #p_w = np.sum(n_wb,axis=1) / float(np.sum(n_wb))
+        
+        ind_d = np.where(np.sum(n_db, axis=0) > 0)[0]
+        Bd = len(ind_d)
+        n_db = n_db[:, ind_d]
+        
+        ind_w = np.where(np.sum(n_wb, axis=0) > 0)[0]
+        Bw = len(ind_w)
+        n_wb = n_wb[:, ind_w]
+        
+        ind_w2 = np.where(np.sum(n_dbw, axis=0) > 0)[0]
+        n_dbw = n_dbw[:, ind_w2]
+        
+        ## group-membership distributions
+        p_tw_w = (n_wb / np.sum(n_wb, axis=1)[:, np.newaxis]).T
+        
+        # group membership of each doc-node P(t_d | d)
+        p_td_d = (n_db / np.sum(n_db, axis=1)[:, np.newaxis]).T
+        
+        ## topic-distribution for words P(w | t_w)
+        p_w_tw = n_wb / np.sum(n_wb, axis=0)[np.newaxis, :]
+        
+        ## Mixture of word-groups into documetns P(t_w | d)
+        p_tw_d = (n_dbw / np.sum(n_dbw, axis=1)[:, np.newaxis]).T
+        
+        result = {}
+        result['Bd'] = Bd
+        result['Bw'] = Bw
+        result['p_tw_w'] = p_tw_w
+        result['p_td_d'] = p_td_d
+        result['p_w_tw'] = p_w_tw
+        result['p_tw_d'] = p_tw_d
+        
+        return result
