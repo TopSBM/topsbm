@@ -36,6 +36,10 @@ class hSBMTransformer(BaseEstimator, TransformerMixin):
     num_samples_ : int
     state_
          Inference state from graphtool
+    groups_
+        results of group membership from inference
+    mdl_
+        minimum description length of inferred state
     """
     def __init__(self, n_components=10, weighted_edges=True):
         self.n_components = n_components
@@ -102,26 +106,27 @@ class hSBMTransformer(BaseEstimator, TransformerMixin):
                                                  #  overlap=overlap,  # TODO: implement overlap
                                                  state_args=state_args)
 
-        self.state = state
+        self.state_ = state
         ## minimum description length
-        self.mdl = state.entropy()
+        self.mdl_ = state.entropy()
         ## collect group membership for each level in the hierarchy
         L = len(state.levels)
         dict_groups_L = {}
 
         ## only trivial bipartite structure
         if L == 2:
-            self.L = 1
+            self.L_ = 1
             for l in range(L-1):
                 dict_groups_l = self.__get_groups(l=l)
                 dict_groups_L[l] = dict_groups_l
         ## omit trivial levels: l=L-1 (single group), l=L-2 (bipartite)
         else:
-            self.L = L-2
+            self.L_ = L-2
             for l in range(L-2):
                 dict_groups_l = self.__get_groups(l=l)
                 dict_groups_L[l] = dict_groups_l
-        self.groups = dict_groups_L
+        self.groups_ = dict_groups_L
+    
     
     def fit(self, X, y=None):
         """Fit the hSBM topic model
@@ -164,11 +169,6 @@ class hSBMTransformer(BaseEstimator, TransformerMixin):
         self.graph_ = self.__make_graph(X)
         self.num_features_ = X.shape[1]
         self.num_samples_ = X.shape[0]
-
-        self.state = None
-        self.groups = {} ## results of group membership from inference
-        self.mdl = np.nan ## minimum description length of inferred state
-        self.L = np.nan ## number of levels in hierarchy
         
         self.__fit_hsbm()
         
@@ -195,7 +195,7 @@ class hSBMTransformer(BaseEstimator, TransformerMixin):
         V = self.num_features_
         D = self.num_samples_
     
-        g = self.g
+        g = self.graph_
         state = self.state
         state_l = state.project_level(l).copy(overlap=True)
         state_l_edges = state_l.get_edge_blocks()
