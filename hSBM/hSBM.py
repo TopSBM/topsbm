@@ -175,39 +175,7 @@ class hSBMTransformer(BaseEstimator, TransformerMixin):
         # TODO: transform by calculating topic_dist for each doc index
         #       and putting it into an array
         
-        return Xt
-    
-    
-
-    def transform(self, X):
-        """ A reference implementation of a transform function.
-
-        Parameters
-        ----------
-        X : array-like of shape = [n_samples, n_features]
-            The input samples.
-
-        Returns
-        -------
-        X_transformed : array of int of shape = [n_samples, n_features]
-            The array containing the element-wise square roots of the values
-            in `X`
-        """
-        # Check is fit had been called
-        check_is_fitted(self, ['input_shape_'])
-
-        # Input validation
-        X = check_array(X)
-
-        # Check that the input is of the same shape as the one passed
-        # during fit.
-        if X.shape != self.input_shape_:
-            raise ValueError('Shape of input is different from what was seen'
-                             'in `fit`')
-            
-        print("Hello I am in hSBMTransformer:transform()")
-        return np.sqrt(X)
-        
+        return Xt        
         
     def __get_groups(self, l=0):
         '''extract group membership statistics from the inferred state.
