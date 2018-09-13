@@ -32,7 +32,7 @@ conda create -n testenv --yes python=$PYTHON_VERSION pip nose \
 
 source activate testenv
 
-conda install --yes  -c flyem-forge graph-tool
+conda install --yes  -c conda-forge -c flyem-forge graph-tool
 
 if [[ "$COVERAGE" == "true" ]]; then
     pip install coverage coveralls
