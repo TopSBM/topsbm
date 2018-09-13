@@ -5,7 +5,8 @@ This is the main file for implementing the hSBM for text mining.
 from collections import defaultdict
 
 import numpy as np
-import graph_tool as gt
+from graph_tool import Graph
+from graph_tool.inference import minimize_nested_blockmodel_dl
 import scipy.sparse
 
 from sklearn.base import BaseEstimator, ClassifierMixin, TransformerMixin
@@ -138,7 +139,7 @@ class hSBMTransformer(BaseEstimator, TransformerMixin):
 
         ## make a graph
         ## create a graph
-        g = gt.Graph(directed=False)
+        g = Graph(directed=False)
         ## define node properties
         ## name: docs - title, words - 'word'
         ## kind: docs - 0, words - 1
@@ -184,7 +185,7 @@ class hSBMTransformer(BaseEstimator, TransformerMixin):
             state_args["eweight"] = self.graph_.ep.count
 
         ## the inference
-        state = gt.minimize_nested_blockmodel_dl(self.graph_, deg_corr=True,
+        state = minimize_nested_blockmodel_dl(self.graph_, deg_corr=True,
                                                  #  overlap=overlap,  # TODO: implement overlap
                                                  state_args=state_args)
 
