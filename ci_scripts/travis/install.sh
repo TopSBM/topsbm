@@ -28,10 +28,11 @@ popd
 # provided versions
 conda create -n testenv --yes python=$PYTHON_VERSION pip nose \
       numpy=$NUMPY_VERSION scipy=$SCIPY_VERSION cython=$CYTHON_VERSION \
-      scikit-learn=0.19 -c flyem-forge graph-tool
+      scikit-learn=0.19
 
 source activate testenv
 
+conda install --yes  -c flyem-forge graph-tool
 
 if [[ "$COVERAGE" == "true" ]]; then
     pip install coverage coveralls
