@@ -1,8 +1,8 @@
-set -ex
-
 # Deactivate the travis-provided virtual environment and setup a
 # conda-based environment instead
 deactivate
+
+set -ex
 
 # Use the miniconda installer for faster download / install of conda
 # itself
@@ -27,7 +27,7 @@ popd
 # Configure the conda environment and put it in the path using the
 # provided versions
 conda create -n testenv --yes python=$PYTHON_VERSION pip nose \
-      numpy=$NUMPY_VERSION scipy=$SCIPY_VERSION cython=$CYTHON_VERSION \
+      numpy=$NUMPY_VERSION scipy=$SCIPY_VERSION \
       scikit-learn=0.19
 
 source activate testenv
