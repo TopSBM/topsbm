@@ -23,8 +23,6 @@ class hSBMTransformer(BaseEstimator):
 
     Parameters
     ----------
-    n_components : int, optional (default=10)
-        Number of topics.
     weighted_edges : bool, default=True
         When True, edges are weighted instead of adding duplicate edges.
 
@@ -41,8 +39,7 @@ class hSBMTransformer(BaseEstimator):
     mdl_
         minimum description length of inferred state
     """
-    def __init__(self, n_components=10, weighted_edges=True):
-        self.n_components = n_components
+    def __init__(self, weighted_edges=True):
         self.weighted_edges = weighted_edges
         
         ## VJ - Check if all this init are needed
@@ -165,7 +162,7 @@ class hSBMTransformer(BaseEstimator):
         Xt : ndarray of shape (n_samples, n_components)
             The cluster probability for each sample in X
         """
-        X = check_array(X)
+        X = check_array(X, accept_sparse=True)
         self.graph_ = self.__make_graph(X)
         self.num_features_ = X.shape[1]
         self.num_samples_ = X.shape[0]
