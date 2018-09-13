@@ -1,3 +1,5 @@
+set -ex
+
 # Deactivate the travis-provided virtual environment and setup a
 # conda-based environment instead
 deactivate
@@ -26,7 +28,7 @@ popd
 # provided versions
 conda create -n testenv --yes python=$PYTHON_VERSION pip nose \
       numpy=$NUMPY_VERSION scipy=$SCIPY_VERSION cython=$CYTHON_VERSION \
-      scikit-learn=0.19 -C flyem-forge graph-tool
+      scikit-learn=0.19 -c flyem-forge graph-tool
 
 source activate testenv
 
