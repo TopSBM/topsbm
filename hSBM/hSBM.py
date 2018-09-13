@@ -5,7 +5,7 @@ This is the main file for implementing the hSBM for text mining.
 from collections import defaultdict
 
 import numpy as np
-import graphtool as gt
+import graph_tool as gt
 import scipy.sparse
 
 from sklearn.base import BaseEstimator, ClassifierMixin, TransformerMixin
