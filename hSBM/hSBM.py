@@ -18,7 +18,7 @@ from sklearn.metrics import euclidean_distances
 
 
 
-class hSBMTransformer(BaseEstimator, TransformerMixin):
+class hSBMTransformer(BaseEstimator):
     """ An example transformer that returns the element-wise square root..
 
     Parameters
@@ -172,9 +172,18 @@ class hSBMTransformer(BaseEstimator, TransformerMixin):
         
         self.__fit_hsbm()
         
-        # TODO: transform by calculating topic_dist for each doc index
-        #       and putting it into an array
+        l = 0
+        Xt = self.groups_[l]['p_tw_d'].T
         
+        '''
+        np.zeros(self.num_samples_, self.groups_[l]['Bw'])
+        dict_groups =  self.groups_[l]
+        for doc_index in range(self.num_samples_):
+            p_tw_d = dict_groups['p_tw_d']
+            list_topics_tw = []
+            for tw, p_tw in enumerate(p_tw_d[:,doc_index]):
+                    list_topics_tw += [(tw, p_tw)]
+        '''
         return Xt        
         
     def __get_groups(self, l=0):
@@ -246,6 +255,9 @@ class hSBMTransformer(BaseEstimator, TransformerMixin):
         result['p_tw_w'] = p_tw_w
         result['p_td_d'] = p_td_d
         result['p_w_tw'] = p_w_tw
-        result['p_tw_d'] = p_tw_d
+        result['p_tw_d'] = p_tw_d  # XXX: this appears to be 1-p_td_d
         
         return result
+    
+    def __topicdist(self, doc_index, l=0):
+        return list_topics_tw
