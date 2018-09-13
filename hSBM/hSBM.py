@@ -196,7 +196,8 @@ class hSBMTransformer(BaseEstimator, TransformerMixin):
         D = self.num_samples_
     
         g = self.graph_
-        state = self.state
+        state = self.state_
+        idx = g.vp["idx"]
         state_l = state.project_level(l).copy(overlap=True)
         state_l_edges = state_l.get_edge_blocks()
         
@@ -210,9 +211,9 @@ class hSBMTransformer(BaseEstimator, TransformerMixin):
             z1,z2 = state_l_edges[e]
             v1 = e.source()
             v2 = e.target()
-            n_db[int(v1), z1] += 1
-            n_dbw[int(v1), z2] += 1
-            n_wb[int(v2) - D, z2] += 1
+            n_db[idx[v1], z1] += 1
+            n_dbw[idx[v1], z2] += 1
+            n_wb[idx[v2], z2] += 1
             
         #p_w = np.sum(n_wb,axis=1) / float(np.sum(n_wb))
         
