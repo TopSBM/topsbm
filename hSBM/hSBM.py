@@ -36,6 +36,8 @@ class hSBMTransformer(BaseEstimator):
          Inference state from graphtool
     groups_
         results of group membership from inference
+        
+        # TODO: document structure and semantics of this
     mdl_
         minimum description length of inferred state
     """
@@ -44,7 +46,6 @@ class hSBMTransformer(BaseEstimator):
         
         ## VJ - Check if all this init are needed
         ## Also need to add the relevant hyper-parameters.
-        
 
     def __make_graph(self, X):
         num_samples = X.shape[0]
@@ -89,8 +90,7 @@ class hSBMTransformer(BaseEstimator):
                 for n in range(count):
                     g.add_edge(doc_vert, word_vert)
         return g
-        
-    
+
     def __fit_hsbm(self):
         clabel = self.graph_.vp['kind']
 
