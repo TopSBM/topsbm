@@ -21,7 +21,7 @@ except ImportError:
 setup(name='hSBM-Decomposition',
       version='0.0.1',
       description='A scikit-learn extension for hSBM Decomposition',
-      author='Vijay Raghunath',
+      author='Martin Gerlach, Eduardo Altmann, Vijay Raghunath',
       packages=find_packages(),
       install_requires=INSTALL_REQUIRES,
       author_email='vrag7458@uni.sydney.edu.au',
