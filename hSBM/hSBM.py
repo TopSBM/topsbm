@@ -41,6 +41,8 @@ class hSBMTransformer(BaseEstimator):
     """
     def __init__(self, weighted_edges=True):
         self.weighted_edges = weighted_edges
+        ## num_components is to hold the number of topics.
+        self.num_components_ = []
         
         ## VJ - Check if all this init are needed
         ## Also need to add the relevant hyper-parameters.
@@ -181,6 +183,7 @@ class hSBMTransformer(BaseEstimator):
             for tw, p_tw in enumerate(p_tw_d[:,doc_index]):
                     list_topics_tw += [(tw, p_tw)]
         '''
+        num_components_ = Xt
         return Xt        
         
     def __get_groups(self, l=0):
