@@ -30,8 +30,8 @@ class hSBMTransformer(BaseEstimator):
     ----------
     graph_ : graph_tool.Graph
         Bipartite graph between samples (kind=0) and features (kind=1)
-    num_features_ : int
-    num_samples_ : int
+    n_components_ : int
+        Number of topic inferred
     state_
          Inference state from graphtool
     groups_
@@ -181,7 +181,7 @@ class hSBMTransformer(BaseEstimator):
             for tw, p_tw in enumerate(p_tw_d[:,doc_index]):
                     list_topics_tw += [(tw, p_tw)]
         '''
-        self.num_components_  = Xt
+        self.n_components_  = Xt.shape[1]
         return Xt        
         
     def __get_groups(self, l=0):
