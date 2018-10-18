@@ -1,17 +1,23 @@
 import os
-import pylab as plt 
+import matplotlib.pylab as plt 
 
-#from ..\hSBM import hSBMTransformer
+from sklearn.feature_extraction.text import CountVectorizer
+from hSBM import hSBMTransformer
+from hSBM import hSBMTransformer
 
 path_data = ''
 
-## texts
+## Load texts and vectorize
 fname_data = 'corpus.txt'
 filename = os.path.join(path_data,fname_data)
 
 with open(filename,'r') as f:
-    x = f.readlines()
-texts = [h.split() for h in x]
+    docs = f.readlines()
+
+vec = CountVectorizer()
+X = vec.fit_transform(docs)
+
+# X is now a sparse matrix of (docs, words)
 
 ## titles
 fname_data = 'titles.txt'
@@ -25,7 +31,11 @@ print('Reached here!')
 
 i_doc = 0
 print(titles[0])
-print(texts[i_doc][:10])
+print(docs[i_doc][:100])
 
-# Fit the model.
+# Fit the model
+
 model = hSBMTransformer()
+Xt = model.fit_transform(X)
+
+model.plot_graph("model-decomposition.png")
