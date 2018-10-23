@@ -32,7 +32,8 @@ conda create -n testenv --yes python=$PYTHON_VERSION pip nose \
 
 source activate testenv
 
-conda install --yes  -c conda-forge -c flyem-forge graph-tool
+conda install --yes  -c conda-forge -c flyem-forge graph-tool pygobject cairo
+conda install --yes -c pkgw/label/superseded gtk3
 
 if [[ "$COVERAGE" == "true" ]]; then
     pip install coverage coveralls
