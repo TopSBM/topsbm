@@ -14,6 +14,8 @@ from sklearn.utils.validation import check_X_y, check_array, check_is_fitted
 from sklearn.utils.multiclass import unique_labels
 from sklearn.metrics import euclidean_distances
 
+
+
 ########### HELPER FUNCTIONS
 
 
@@ -259,3 +261,19 @@ class hSBMTransformer(BaseEstimator):
     
     def __topicdist(self, doc_index, l=0):
         return list_topics_tw
+    
+    def plot_graph(self, filename, n_edges=1000):
+        """Plots arcs from documents to words coloured according to inferred groups
+        
+        Parameters
+        ----------
+        n_edges : int
+            ???
+            
+        Returns
+        -------
+        ax : matplotlib.axes.Axes
+            An axes with the plot on it
+        """
+        self.state_.draw(layout='bipartite', output=filename,
+                            subsample_edges=n_edges, hshortcuts=1, hide=0)

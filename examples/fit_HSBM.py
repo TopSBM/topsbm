@@ -2,7 +2,7 @@ import os
 import matplotlib.pylab as plt 
 
 from sklearn.feature_extraction.text import CountVectorizer
-from hSBM import hSBMTransformer
+#from hSBM import hSBMTransformer
 from hSBM import hSBMTransformer
 
 path_data = ''
