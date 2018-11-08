@@ -2,8 +2,7 @@ import os
 import matplotlib.pylab as plt 
 
 from sklearn.feature_extraction.text import CountVectorizer
-#from hSBM import hSBMTransformer
-from hSBM import hSBMTransformer
+from topsbm import TopSBM
 
 path_data = ''
 
@@ -35,7 +34,7 @@ print(docs[i_doc][:100])
 
 # Fit the model
 
-model = hSBMTransformer()
+model = TopSBM()
 Xt = model.fit_transform(X)
 
 model.plot_graph("model-decomposition.png")
