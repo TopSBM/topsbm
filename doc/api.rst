@@ -1,4 +1,5 @@
 API Documentation
 =================
 
-* :doc:`template`
+.. automodule:: topsbm
+    :members:
