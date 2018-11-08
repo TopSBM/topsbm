@@ -1,5 +1,6 @@
 API Documentation
 =================
 
-.. automodule:: topsbm
+.. autoclass:: topsbm.TopSBM
     :members:
+    :inherited-members:
