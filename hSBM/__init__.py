@@ -1,4 +1,3 @@
-from .hSBM import (hSBMTransformer)
-#from . import template Joel: check if this needed.
+from .transformer import TopSBM
 
-__all__ = ['hSBMTransformer']
+__all__ = ['TopSBM']

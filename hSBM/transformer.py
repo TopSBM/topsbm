@@ -18,7 +18,7 @@ from sklearn.metrics import euclidean_distances
 
 
 
-class hSBMTransformer(BaseEstimator):
+class TopSBM(BaseEstimator):
     """ An example transformer that returns the element-wise square root..
 
     Parameters

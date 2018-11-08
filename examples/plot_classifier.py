@@ -9,7 +9,7 @@ if 0 {
 An example plot of :class:`skltemplate.template.TemplateClassifier`
 """
 import numpy as np
-from hSBM import hSBMTransformer
+from topsbm import TopSBM
 from matplotlib import pyplot as plt
 
 
@@ -17,7 +17,7 @@ if (0):
    
     X = [[0, 0], [1, 1]]
     y = [0, 1]
-    clf = hSBMTransformer()
+    clf = TopSBM()
     clf.fit(X, y)
     
     rng = np.random.RandomState(13)
