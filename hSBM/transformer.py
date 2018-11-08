@@ -14,6 +14,8 @@ from sklearn.utils.validation import check_X_y, check_array, check_is_fitted
 from sklearn.utils.multiclass import unique_labels
 from sklearn.metrics import euclidean_distances
 
+
+
 ########### HELPER FUNCTIONS
 
 
@@ -43,7 +45,7 @@ class TopSBM(BaseEstimator):
     """
     def __init__(self, weighted_edges=True):
         self.weighted_edges = weighted_edges
-        
+                
         ## VJ - Check if all this init are needed
         ## Also need to add the relevant hyper-parameters.
 
@@ -181,6 +183,7 @@ class TopSBM(BaseEstimator):
             for tw, p_tw in enumerate(p_tw_d[:,doc_index]):
                     list_topics_tw += [(tw, p_tw)]
         '''
+        self.num_components_  = Xt
         return Xt        
         
     def __get_groups(self, l=0):
@@ -258,3 +261,19 @@ class TopSBM(BaseEstimator):
     
     def __topicdist(self, doc_index, l=0):
         return list_topics_tw
+    
+    def plot_graph(self, filename, n_edges=1000):
+        """Plots arcs from documents to words coloured according to inferred groups
+        
+        Parameters
+        ----------
+        n_edges : int
+            ???
+            
+        Returns
+        -------
+        ax : matplotlib.axes.Axes
+            An axes with the plot on it
+        """
+        self.state_.draw(layout='bipartite', output=filename,
+                            subsample_edges=n_edges, hshortcuts=1, hide=0)
