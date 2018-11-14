@@ -1,11 +1,3 @@
-# hSBM-Decomposition - A scikit-learn extensions for implementing Hierarchical Structure Block Models for text mining.
+# topsbm - A scikit-learn extension for Topic Models based on Stochastic Block Models
 
-
-Provides a Scikit-Learn extension for implementing hSBM.
-
-## Important Links
-HTML Documentation - To be added
-
-## Installation and Usage
-To be added
-
+M. Gerlach, T. P. Peixoto, and E. G. Altmann, [“A network approach to topic models,”](http://advances.sciencemag.org/content/4/7/eaaq1360) Science Advances (2018)

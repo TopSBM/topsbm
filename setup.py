@@ -7,20 +7,21 @@ with open('requirements.txt') as f:
 
 
 try:
-    import numpy
+    import numpy  # noqa
 except ImportError:
     print('numpy is required during installation')
     sys.exit(1)
 
 try:
-    import scipy
+    import scipy  # noqa
 except ImportError:
     print('scipy is required during installation')
     sys.exit(1)
 
-setup(name='hSBM-Decomposition',
+setup(name='topsbm',
       version='0.0.1',
-      description='A scikit-learn extension for hSBM Decomposition',
+      description='A scikit-learn extension for Topic Modelling with '
+                  'Stochastic Block Models',
       author='Martin Gerlach, Eduardo Altmann, Vijay Raghunath',
       packages=find_packages(),
       install_requires=INSTALL_REQUIRES,
