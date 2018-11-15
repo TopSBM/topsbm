@@ -1,3 +1,9 @@
+"""
+Plot topics on word-document graph
+----------------------------------
+
+"""
+
 import os
 import matplotlib.pylab as plt 
 
