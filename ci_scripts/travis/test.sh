@@ -11,3 +11,6 @@ if [[ "$COVERAGE" == "true" ]]; then
 else
     nosetests -s $MODULE
 fi
+
+pip install flake8
+flake8 topsbm examples
