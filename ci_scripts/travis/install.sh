@@ -26,12 +26,11 @@ popd
 
 # Configure the conda environment and put it in the path using the
 # provided versions
-conda env create -n testenv -f ../../environment.yml
+conda env create -f ../../environment.yml  # creates topsbm env
+source activate topsbm
 conda install --yes python=$PYTHON_VERSION pip nose \
       numpy=$NUMPY_VERSION scipy=$SCIPY_VERSION \
       scikit-learn=0.19
-
-source activate testenv
 
 if [[ "$COVERAGE" == "true" ]]; then
     pip install coverage coveralls
