@@ -27,7 +27,7 @@ popd
 # Configure the conda environment and put it in the path using the
 # provided versions
 conda create -n testenv --yes python=$PYTHON_VERSION
-conda env update -f ../../environment.yml
+conda env update -n testenv -f ../../environment.yml
 source activate testenv
 conda install --yes python=$PYTHON_VERSION pip nose \
       numpy=$NUMPY_VERSION scipy=$SCIPY_VERSION \
