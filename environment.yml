@@ -1,0 +1,15 @@
+name: topsbm
+channels:
+  - conda-forge
+  - flyem-forge
+  - pkgw/label/superseded
+dependencies:
+  - nose
+  - python=3.*
+  - numpy
+  - scipy
+  - scikit-learn=0.19
+  - graph-tool
+  - pygobject
+  - cairo
+  - gtk3
