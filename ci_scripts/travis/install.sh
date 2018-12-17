@@ -19,14 +19,16 @@ if [[ ! -f miniconda.sh ]]
        -O miniconda.sh
    fi
 chmod +x miniconda.sh && ./miniconda.sh -b
-cd ..
 export PATH=/home/travis/miniconda/bin:$PATH
 conda update --yes conda
 popd
 
 # Configure the conda environment and put it in the path using the
 # provided versions
-cd ../../ && conda env create && cd -
+cd ../..
+cat environment.yml
+conda env create
+cd  -
 source activate topsbm
 conda install --yes python=$PYTHON_VERSION pip nose \
       numpy=$NUMPY_VERSION scipy=$SCIPY_VERSION \
