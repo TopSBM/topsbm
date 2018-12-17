@@ -26,9 +26,8 @@ popd
 
 # Configure the conda environment and put it in the path using the
 # provided versions
-conda create -n testenv --yes python=$PYTHON_VERSION
-conda env update -n testenv -f ../../environment.yml
-source activate testenv
+conda env create -f ../../environment.yml
+source activate topsbm
 conda install --yes python=$PYTHON_VERSION pip nose \
       numpy=$NUMPY_VERSION scipy=$SCIPY_VERSION \
       scikit-learn=0.19
