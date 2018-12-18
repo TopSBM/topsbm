@@ -17,6 +17,9 @@ class TopSBM(BaseEstimator):
 
     Parameters
     ----------
+    n_init : int, default=1
+        Number of random initialisations to perform in order to avoid a local
+        minimum of MDL. The minimum MDL solution is chosen.
     weighted_edges : bool, default=True
         When True, edges are weighted instead of adding duplicate edges.
 
@@ -36,11 +39,9 @@ class TopSBM(BaseEstimator):
         minimum description length of inferred state
     """
 
-    def __init__(self, weighted_edges=True):
+    def __init__(self, weighted_edges=True, n_init=1):
         self.weighted_edges = weighted_edges
-
-        # VJ - Check if all this init are needed
-        # Also need to add the relevant hyper-parameters.
+        self.n_init = n_init
 
     def __make_graph(self, X):
         num_samples = X.shape[0]
@@ -93,17 +94,22 @@ class TopSBM(BaseEstimator):
         if "count" in self.graph_.ep:
             state_args["eweight"] = self.graph_.ep.count
 
-        # the inference
-        state = minimize_nested_blockmodel_dl(self.graph_, deg_corr=True,
-                                              # overlap=overlap,  # TODO:
-                                              # implement overlap
-                                              state_args=state_args)
+        self.mdl_ = np.inf
+        for _ in range(self.n_init):
+            # the inference
+            state = minimize_nested_blockmodel_dl(self.graph_, deg_corr=True,
+                                                  # overlap=overlap,  # TODO:
+                                                  # implement overlap
+                                                  state_args=state_args)
 
-        self.state_ = state
-        # minimum description length
-        self.mdl_ = state.entropy()
+            mdl = state.entropy()
+            if mdl < self.mdl_:
+                self.state_ = state.copy()
+                self.mdl_ = mdl
+                del state
+
         # collect group membership for each level in the hierarchy
-        L = len(state.levels)
+        L = len(self.state_.levels)
         dict_groups_L = {}
 
         # only trivial bipartite structure
