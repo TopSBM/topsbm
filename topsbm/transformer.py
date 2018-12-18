@@ -33,6 +33,9 @@ class TopSBM(BaseEstimator):
 
     Parameters
     ----------
+    n_init : int, default=1
+        Number of random initialisations to perform in order to avoid a local
+        minimum of MDL. The minimum MDL solution is chosen.
     weighted_edges : bool, default=True
         When True, edges are weighted instead of adding duplicate edges.
     random_state : None, int or np.random.RandomState
@@ -64,12 +67,11 @@ class TopSBM(BaseEstimator):
     <http://advances.sciencemag.org/content/4/7/eaaq1360>`_.
     Science Advances (2018)
     """
-    def __init__(self, weighted_edges=True, random_state=None):
-        self.weighted_edges = weighted_edges
-        self.random_state = random_state
 
-        # VJ - Check if all this init are needed
-        # Also need to add the relevant hyper-parameters.
+    def __init__(self, weighted_edges=True, n_init=1, random_state=None):
+        self.weighted_edges = weighted_edges
+        self.n_init = n_init
+        self.random_state = random_state
 
     def __make_graph(self, X):
         num_samples = X.shape[0]
@@ -122,17 +124,22 @@ class TopSBM(BaseEstimator):
         if "count" in self.graph_.ep:
             state_args["eweight"] = self.graph_.ep.count
 
-        # the inference
-        state = minimize_nested_blockmodel_dl(self.graph_, deg_corr=True,
-                                              # overlap=overlap,  # TODO:
-                                              # implement overlap
-                                              state_args=state_args)
+        self.mdl_ = np.inf
+        for _ in range(self.n_init):
+            # the inference
+            state = minimize_nested_blockmodel_dl(self.graph_, deg_corr=True,
+                                                  # overlap=overlap,  # TODO:
+                                                  # implement overlap
+                                                  state_args=state_args)
 
-        self.state_ = state
-        # minimum description length
-        self.mdl_ = state.entropy()
+            mdl = state.entropy()
+            if mdl < self.mdl_:
+                self.state_ = state.copy()
+                self.mdl_ = mdl
+                del state
+
         # collect group membership for each level in the hierarchy
-        L = len(state.levels)
+        L = len(self.state_.levels)
         dict_groups_L = {}
 
         # only trivial bipartite structure

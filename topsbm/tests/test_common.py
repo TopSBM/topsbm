@@ -15,6 +15,7 @@
 # along with TopSBM.  If not, see <https://www.gnu.org/licenses/>.
 
 import numpy as np
+import pytest
 from sklearn.utils.estimator_checks import check_estimator
 from sklearn.datasets import fetch_20newsgroups, make_multilabel_classification
 from sklearn.feature_extraction.text import CountVectorizer
@@ -47,6 +48,7 @@ def test_trivial():
     assert model.num_samples_ == 20
 
     print(Xt)
+    print(model.groups_)
     assert Xt.shape == (20, 2)
     assert len(np.unique(Xt, axis=1)) == 2
     assert len(np.unique(Xt[:20], axis=1)) == 1
@@ -54,7 +56,19 @@ def test_trivial():
     assert np.allclose(Xt.sum(axis=1), 1)
     assert np.allclose(np.ptp(Xt, axis=1), 1)
 
-    print(model.groups_)
+
+def test_n_init(n_samples=20, n_features=1000):
+    feat = np.random.RandomState(0).choice(X_20n.shape[1], n_features)
+    X = X_20n[:n_samples, feat]
+    model1 = TopSBM(random_state=0).fit(X)
+    model10 = TopSBM(random_state=0, n_init=10).fit(X)
+    assert model10.mdl_ < model1.mdl_
+    assert np.isclose(model1.state_.entropy(), model1.mdl_,
+                      atol=0, rtol=1e-8)
+    pytest.skip('Failure due to '
+                'https://git.skewed.de/count0/graph-tool/issues/546')
+    assert np.isclose(model10.state_.entropy(), model10.mdl_,
+                      atol=0, rtol=1e-8)
 
 
 def test_random_state(n_samples=20, n_features=100):
