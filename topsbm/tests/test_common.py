@@ -46,6 +46,7 @@ def test_trivial():
     assert model.num_features_ == 1000
     assert model.num_samples_ == 20
 
+    print(Xt)
     assert Xt.shape == (20, 2)
     assert len(np.unique(Xt, axis=1)) == 2
     assert len(np.unique(Xt[:20], axis=1)) == 1
