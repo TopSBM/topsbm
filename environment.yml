@@ -7,11 +7,15 @@ dependencies:
   - nose
   - python=3.*
   - numpy
-  - pytest
-  - pytest-cov
   - scipy
   - scikit-learn=0.19
   - graph-tool
   - pygobject
   - cairo
   - gtk3
+# testing dependencies
+  - pytest
+# doc dependencies
+  - sphinx
+  - sphinx-gallery
+  - numpydoc

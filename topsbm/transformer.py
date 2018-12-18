@@ -1,6 +1,21 @@
 """
-This is the main file for implementing the hSBM for text mining.
+This contains the hSBM topic modelling transformer, TopSBM
 """
+# This file is part of TopSBM
+# Copyright 2017-8, Martin Gerlach and the University of Sydney
+#
+# TopSBM is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# TopSBM is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with TopSBM.  If not, see <https://www.gnu.org/licenses/>.
 
 from collections import defaultdict
 
@@ -14,7 +29,7 @@ from sklearn.utils import check_array, check_random_state
 
 
 class TopSBM(BaseEstimator):
-    """ An example transformer that returns the element-wise square root..
+    """A Scikit-learn compatible transformer for hSBM topic models
 
     Parameters
     ----------
@@ -44,6 +59,13 @@ class TopSBM(BaseEstimator):
         # TODO: document structure and semantics of this
     mdl_
         minimum description length of inferred state
+
+    References
+    ----------
+    Martin Gerlach, Tiago P. Peixoto, and Eduardo G. Altmann,
+    `“A network approach to topic models,”
+    <http://advances.sciencemag.org/content/4/7/eaaq1360>`_.
+    Science Advances (2018)
     """
 
     def __init__(self, weighted_edges=True, n_init=1, random_state=None):
