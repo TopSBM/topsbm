@@ -21,9 +21,9 @@ except ImportError:
 setup(name='topsbm',
       version='0.0.1',
       description='A scikit-learn extension for Topic Modelling with '
-                  'Stochastic Block Models',
-      author='Martin Gerlach, Eduardo Altmann, Vijay Raghunath',
+                  'Hierarchical Stochastic Block Models',
+      author='Martin Gerlach, Eduardo Altmann, Vijay Raghunath, Joel Nothman',
       packages=find_packages(),
       install_requires=INSTALL_REQUIRES,
-      author_email='vrag7458@uni.sydney.edu.au',
+      author_email='martin.gerlach@northwestern.edu',
       )
