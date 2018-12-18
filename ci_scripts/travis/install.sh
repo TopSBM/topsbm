@@ -19,21 +19,18 @@ if [[ ! -f miniconda.sh ]]
        -O miniconda.sh
    fi
 chmod +x miniconda.sh && ./miniconda.sh -b
-cd ..
 export PATH=/home/travis/miniconda/bin:$PATH
 conda update --yes conda
 popd
 
 # Configure the conda environment and put it in the path using the
 # provided versions
-conda create -n testenv --yes python=$PYTHON_VERSION pip nose \
+cat environment.yml
+conda env create
+source activate topsbm
+conda install --yes python=$PYTHON_VERSION pip nose \
       numpy=$NUMPY_VERSION scipy=$SCIPY_VERSION \
       scikit-learn=0.19
-
-source activate testenv
-
-conda install --yes  -c conda-forge -c flyem-forge graph-tool pygobject cairo
-conda install --yes -c pkgw/label/superseded gtk3
 
 if [[ "$COVERAGE" == "true" ]]; then
     pip install coverage coveralls
