@@ -26,7 +26,7 @@ popd
 # Configure the conda environment and put it in the path using the
 # provided versions
 cat environment.yml
-conda env create
+conda env create --verbose
 source activate topsbm
 conda install --yes python=$PYTHON_VERSION pip nose \
       numpy=$NUMPY_VERSION scipy=$SCIPY_VERSION \
