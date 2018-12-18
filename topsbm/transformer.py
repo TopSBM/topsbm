@@ -10,7 +10,7 @@ from graph_tool import Graph
 from graph_tool.inference import minimize_nested_blockmodel_dl
 import scipy.sparse
 from sklearn.base import BaseEstimator
-from sklearn.utils import check_array
+from sklearn.utils import check_array, check_random_state
 
 
 class TopSBM(BaseEstimator):

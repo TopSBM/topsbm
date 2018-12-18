@@ -1,5 +1,4 @@
 import numpy as np
-import pytest
 from sklearn.utils.estimator_checks import check_estimator
 from sklearn.datasets import fetch_20newsgroups, make_multilabel_classification
 from sklearn.feature_extraction.text import CountVectorizer
