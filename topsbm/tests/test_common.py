@@ -37,7 +37,7 @@ def test_trivial():
     X = np.zeros((20, 1000))
     X[:10, :200] = 1
     X[10:, 200:] = 1
-    model = TopSBM(n_init=3)
+    model = TopSBM(n_init=10)
     Xt = model.fit_transform(X)
 
     assert model.graph_ is not None
