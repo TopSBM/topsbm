@@ -14,3 +14,4 @@ dependencies:
   - pygobject
   - cairo
   - gtk3
+  - numpydoc
