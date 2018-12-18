@@ -1,5 +1,5 @@
 """
-This is the main file for implementing the hSBM for text mining.
+This contains the hSBM topic modelling transformer, TopSBM
 """
 # This file is part of TopSBM
 # Copyright 2017-8, Martin Gerlach and the University of Sydney
@@ -29,7 +29,7 @@ from sklearn.utils import check_array, check_random_state
 
 
 class TopSBM(BaseEstimator):
-    """ An example transformer that returns the element-wise square root..
+    """A Scikit-learn compatible transformer for hSBM topic models
 
     Parameters
     ----------
@@ -56,6 +56,13 @@ class TopSBM(BaseEstimator):
         # TODO: document structure and semantics of this
     mdl_
         minimum description length of inferred state
+
+    References
+    ----------
+    Martin Gerlach, Tiago P. Peixoto, and Eduardo G. Altmann,
+    `“A network approach to topic models,”
+    <http://advances.sciencemag.org/content/4/7/eaaq1360>`_.
+    Science Advances (2018)
     """
     def __init__(self, weighted_edges=True, random_state=None):
         self.weighted_edges = weighted_edges
