@@ -36,8 +36,10 @@ def test_common():
 
 def test_trivial():
     X = np.zeros((20, 1000))
-    X[:10, :200] = 1
-    X[10:, 200:] = 1
+    X[:5, :200] = 1
+    X[5:10, 200:210] = 1
+    X[10:12, 210:500] = 1
+    X[12:, 500:] = 1
     model = TopSBM(n_init=10)
     Xt = model.fit_transform(X)
 
@@ -49,8 +51,8 @@ def test_trivial():
 
     print(Xt)
     print(model.groups_)
-    assert Xt.shape == (20, 2)
-    assert len(np.unique(Xt, axis=1)) == 2
+    assert Xt.shape == (20, 4)
+    assert len(np.unique(Xt, axis=1)) == 4
     assert len(np.unique(Xt[:20], axis=1)) == 1
     assert len(np.unique(Xt[20:], axis=1)) == 1
     assert np.allclose(Xt.sum(axis=1), 1)
