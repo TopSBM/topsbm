@@ -39,6 +39,7 @@ except:
 # ones.
 extensions = [
     'sphinx.ext.autodoc',
+    'sphinx.ext.autosummary',
     'sphinx.ext.doctest',
     'sphinx.ext.intersphinx',
     'sphinx.ext.todo',
@@ -61,7 +62,9 @@ sphinx_gallery_conf = {
     # path to your examples scripts
     'examples_dirs' : '../examples',
     # path where to save gallery generated examples
-    'gallery_dirs'  : 'auto_examples'}
+    'gallery_dirs'  : 'auto_examples',
+    'backreferences_dir': 'backrefs',
+}
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -277,19 +280,6 @@ texinfo_documents = [
    u'topsbm developers', 'topsbm', 'One line description of project.',
    'Miscellaneous'),
 ]
-
-def generate_example_rst(app, what, name, obj, options, lines):
-    # generate empty examples files, so that we don't get
-    # inclusion errors if there are no examples for a class / module
-    examples_path = os.path.join(app.srcdir, "modules", "generated",
-                                 "%s.examples" % name)
-    if not os.path.exists(examples_path):
-        # touch file
-        open(examples_path, 'w').close()
-
-
-def setup(app):
-    app.connect('autodoc-process-docstring', generate_example_rst)
 
 # Documents to append as an appendix to all manuals.
 #texinfo_appendices = []
