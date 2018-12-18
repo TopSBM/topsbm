@@ -37,7 +37,7 @@ def test_trivial():
     X = np.zeros((20, 1000))
     X[:10, :200] = 1
     X[10:, 200:] = 1
-    model = TopSBM()
+    model = TopSBM(n_init=3)
     Xt = model.fit_transform(X)
 
     assert model.graph_ is not None
@@ -52,8 +52,7 @@ def test_trivial():
     assert len(np.unique(Xt[:20], axis=1)) == 1
     assert len(np.unique(Xt[20:], axis=1)) == 1
     assert np.allclose(Xt.sum(axis=1), 1)
-    assert np.isclose(abs(Xt[0, 1] - Xt[0, 0]), 1)
-    assert np.isclose(abs(Xt[-1, 1] - Xt[-1, 0]), 1)
+    assert np.allclose(np.ptp(Xt, axis=1), 1)
 
     print(model.groups_)
 
