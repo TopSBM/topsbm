@@ -28,12 +28,12 @@ popd
 cat environment.yml
 conda env create
 source activate topsbm
-conda install --yes python=$PYTHON_VERSION pip nose \
+conda install --yes python=$PYTHON_VERSION pip pytest \
       numpy=$NUMPY_VERSION scipy=$SCIPY_VERSION \
-      scikit-learn=0.19
+      scikit-learn=$SKLEARN_VERSION
 
 if [[ "$COVERAGE" == "true" ]]; then
-    pip install coverage coveralls
+    pip install pytest-cov coverage coveralls
 fi
 
 python --version
