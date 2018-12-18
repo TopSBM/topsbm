@@ -7,6 +7,7 @@ dependencies:
   - nose
   - python=3.*
   - numpy
+  - pytest
   - scipy
   - scikit-learn=0.19
   - graph-tool

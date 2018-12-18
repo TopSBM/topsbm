@@ -5,11 +5,12 @@ This is the main file for implementing the hSBM for text mining.
 from collections import defaultdict
 
 import numpy as np
+import graph_tool
 from graph_tool import Graph
 from graph_tool.inference import minimize_nested_blockmodel_dl
 import scipy.sparse
 from sklearn.base import BaseEstimator
-from sklearn.utils import check_array
+from sklearn.utils import check_array, check_random_state
 
 
 class TopSBM(BaseEstimator):
@@ -22,6 +23,12 @@ class TopSBM(BaseEstimator):
         minimum of MDL. The minimum MDL solution is chosen.
     weighted_edges : bool, default=True
         When True, edges are weighted instead of adding duplicate edges.
+    random_state : None, int or np.random.RandomState
+        Controls randomization. See Scikit-learn's glossary.
+
+        Note that if this is set, the global random state of libcore will be
+        affected, and the global random state of numpy will be temporarily
+        affected.
 
     Attributes
     ----------
@@ -39,9 +46,10 @@ class TopSBM(BaseEstimator):
         minimum description length of inferred state
     """
 
-    def __init__(self, weighted_edges=True, n_init=1):
+    def __init__(self, weighted_edges=True, n_init=1, random_state=None):
         self.weighted_edges = weighted_edges
         self.n_init = n_init
+        self.random_state = random_state
 
     def __make_graph(self, X):
         num_samples = X.shape[0]
@@ -164,11 +172,21 @@ class TopSBM(BaseEstimator):
             The cluster probability for each sample in X
         """
         X = check_array(X, accept_sparse=True)
-        self.graph_ = self.__make_graph(X)
-        self.num_features_ = X.shape[1]
-        self.num_samples_ = X.shape[0]
+        np_random_state = np.random.get_state()  # we restore this later
+        random_state = check_random_state(self.random_state)
+        if self.random_state is not None:
+            graph_tool.seed_rng(
+                random_state.randint(0, np.iinfo(np.int32).max))
+        np.random.set_state(random_state.get_state())
 
-        self.__fit_hsbm()
+        try:
+            self.graph_ = self.__make_graph(X)
+            self.num_features_ = X.shape[1]
+            self.num_samples_ = X.shape[0]
+
+            self.__fit_hsbm()
+        finally:
+            np.random.set_state(np_random_state)
 
         l = 0
         Xt = self.groups_[l]['p_tw_d'].T
