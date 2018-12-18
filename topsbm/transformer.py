@@ -36,6 +36,12 @@ class TopSBM(BaseEstimator):
     n_init : int, default=1
         Number of random initialisations to perform in order to avoid a local
         minimum of MDL. The minimum MDL solution is chosen.
+    min_groups : int, default=1
+        The minimum number of word and docuent groups to infer. This is also a
+        lower bound on the number of topics.
+    max_groups : int, default=None
+        The maximum number of word and docuent groups to infer. This also an
+        upper bound on the number of topics.
     weighted_edges : bool, default=True
         When True, edges are weighted instead of adding duplicate edges.
     random_state : None, int or np.random.RandomState
@@ -57,7 +63,7 @@ class TopSBM(BaseEstimator):
         results of group membership from inference
 
         # TODO: document structure and semantics of this
-    mdl_
+    mdl_ : float
         minimum description length of inferred state
 
     References
@@ -68,7 +74,12 @@ class TopSBM(BaseEstimator):
     Science Advances (2018)
     """
 
-    def __init__(self, weighted_edges=True, n_init=1, random_state=None):
+    def __init__(self, n_init=1, min_groups=1, max_groups=None,
+                 weighted_edges=True, random_state=None):
+
+        self.n_init = n_init
+        self.min_groups = min_groups
+        self.max_groups = max_groups
         self.weighted_edges = weighted_edges
         self.n_init = n_init
         self.random_state = random_state
@@ -130,7 +141,9 @@ class TopSBM(BaseEstimator):
             state = minimize_nested_blockmodel_dl(self.graph_, deg_corr=True,
                                                   # overlap=overlap,  # TODO:
                                                   # implement overlap
-                                                  state_args=state_args)
+                                                  state_args=state_args,
+                                                  B_min=self.min_groups,
+                                                  B_max=self.max_groups)
 
             mdl = state.entropy()
             if mdl < self.mdl_:
