@@ -46,8 +46,6 @@ class TopSBM(BaseEstimator):
     ----------
     graph_ : graph_tool.Graph
         Bipartite graph between samples (kind=0) and features (kind=1)
-    num_features_ : int
-    num_samples_ : int
     state_
          Inference state from graphtool
     groups_
@@ -56,6 +54,8 @@ class TopSBM(BaseEstimator):
         # TODO: document structure and semantics of this
     mdl_
         minimum description length of inferred state
+    num_features_ : int
+    num_samples_ : int
 
     References
     ----------

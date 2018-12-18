@@ -29,7 +29,7 @@ bunch_20n = fetch_20newsgroups(categories=['alt.atheism',
 X_20n = CountVectorizer().fit_transform(bunch_20n.data)
 
 
-def test_transformer():
+def test_common():
     return check_estimator(TopSBM)
 
 
@@ -41,3 +41,27 @@ def test_random_state(n_samples=20, n_features=100):
     Xt2 = TopSBM(random_state=2).fit_transform(X)
     np.testing.assert_allclose(Xt0a, Xt0b)
     assert Xt0a.shape != Xt2.shape or not np.allclose(Xt0a, Xt2)
+
+
+def test_trivial():
+    X = np.zeros((20, 1000))
+    X[:10, :200] = 1
+    X[10:, 200:] = 1
+    model = TopSBM()
+    Xt = model.fit_transform(X)
+
+    assert model.graph_ is not None
+    assert model.state_ is not None
+    assert model.mdl_ > 0
+    assert model.num_features_ == 1000
+    assert model.num_samples_ == 20
+
+    assert Xt.shape == (20, 2)
+    assert len(np.unique(Xt, axis=1)) == 2
+    assert len(np.unique(Xt[:20], axis=1)) == 1
+    assert len(np.unique(Xt[20:], axis=1)) == 1
+    assert np.allclose(Xt.sum(axis=1), 1)
+    assert np.isclose(abs(Xt[0, 1] - Xt[0, 0]), 1)
+    assert np.isclose(abs(Xt[-1, 1] - Xt[-1, 0]), 1)
+
+    print(model.groups_)
