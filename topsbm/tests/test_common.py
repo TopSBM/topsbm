@@ -23,8 +23,10 @@ def test_n_init(n_samples=20, n_features=1000):
     model1 = TopSBM(random_state=0).fit(X)
     model10 = TopSBM(random_state=0, n_init=10).fit(X)
     assert model10.mdl_ < model1.mdl_
-    assert model1.state_.entropy() == model1.mdl_
-    assert model10.state_.entropy() == model10.mdl_
+    assert np.isclose(model1.state_.entropy(), model1.mdl_,
+                      atol=0, rtol=1e-8)
+    assert np.isclose(model10.state_.entropy(), model10.mdl_,
+                      atol=0, rtol=1e-8)
 
 
 def test_random_state(n_samples=20, n_features=100):
