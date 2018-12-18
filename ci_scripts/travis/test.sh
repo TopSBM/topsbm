@@ -6,11 +6,7 @@ mkdir -p $TEST_DIR
 
 cd $TEST_DIR
 
-if [[ "$COVERAGE" == "true" ]]; then
-    nosetests -s --with-coverage --cover-package=$MODULE $MODULE
-else
-    nosetests -s $MODULE
-fi
+pytest --showlocals --pyargs topsbm
 
 pip install flake8
 flake8 topsbm examples

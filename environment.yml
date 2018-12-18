@@ -8,6 +8,7 @@ dependencies:
   - python=3.*
   - numpy
   - pytest
+  - pytest-cov
   - scipy
   - scikit-learn=0.19
   - graph-tool
