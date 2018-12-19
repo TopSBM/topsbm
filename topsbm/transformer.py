@@ -87,22 +87,22 @@ class TopSBM(BaseEstimator):
         if self.weighted_edges:
             ecount = g.ep["count"] = g.new_ep("int")
 
-        docs_add = defaultdict(lambda: g.add_vertex())
-        words_add = defaultdict(lambda: g.add_vertex())
+        doc_vertices = defaultdict(lambda: g.add_vertex())
+        word_vertices = defaultdict(lambda: g.add_vertex())
 
         # add all documents first
         for i_d in range(num_samples):
-            docs_add[i_d]
+            doc_vertices[i_d]
 
         # add all documents and words as nodes
         # add all tokens as links
         X = scipy.sparse.coo_matrix(X)
         for row, col, count in zip(X.row, X.col, X.data):
-            doc_vert = docs_add[row]
+            doc_vert = doc_vertices[row]
             idx[doc_vert] = row
             kind[doc_vert] = 0
 
-            word_vert = words_add[col]
+            word_vert = word_vertices[col]
 
             idx[word_vert] = col
             kind[word_vert] = 1

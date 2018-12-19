@@ -34,6 +34,13 @@ def test_common():
     return check_estimator(TopSBM)
 
 
+def check_graph_structure(model):
+    n_vertices = model.n_samples_ + model.n_features_
+    for e in model.graph_.edges():
+        assert model.n_samples_ > e.source() >= 0
+        assert n_vertices > e.target() >= model.n_samples_
+
+
 def test_trivial():
     X = np.zeros((20, 2))
     # two populations of samples with non-overlapping feature spaces
@@ -45,23 +52,23 @@ def test_trivial():
     print(Xt)
     print(model.groups_)
 
-    assert model.graph_ is not None
+    check_graph_structure(model.graph_)
     assert model.state_ is not None
     assert model.mdl_ > 0
     assert model.num_features_ == X.shape[1]
     assert model.num_samples_ == X.shape[0]
 
+    # rows sum to 1
     assert np.allclose(Xt.sum(axis=1), 1)
+    # rows consist of 0 and 1
     assert np.allclose(np.ptp(Xt, axis=1), 1)
     # There should be no topical overlap between the two populations
     tuples = [tuple(row) for row in Xt]
     assert not set(tuples[:10]) & set(tuples[10:])
 
-    # XXX: logically these should be held, but they are not
-    # assert Xt.shape == (20, 2)
-    # assert len(np.unique(Xt, axis=1)) == 2
-    # assert len(np.unique(Xt[:20], axis=1)) == 1
-    # assert len(np.unique(Xt[20:], axis=1)) == 1
+    # more specifically:
+    assert Xt.shape == (20, 2)
+    assert len(np.unique(Xt, axis=1)) == 2
 
     # TODO: also test other outputs in groups_
 
