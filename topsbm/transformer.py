@@ -270,16 +270,13 @@ class TopSBM(BaseEstimator):
 
         # p_w = np.sum(n_wb,axis=1) / float(np.sum(n_wb))
 
-        ind_d = np.where(np.sum(n_db, axis=0) > 0)[0]
-        Bd = len(ind_d)
-        n_db = n_db[:, ind_d]
+        n_db = n_db[:, np.any(n_db, axis=0)]
+        Bd = n_db.shape[1]
 
-        ind_w = np.where(np.sum(n_wb, axis=0) > 0)[0]
-        Bw = len(ind_w)
-        n_wb = n_wb[:, ind_w]
+        n_wb = n_wb[:, np.any(n_wb, axis=0)]
+        Bw = n_wb.shape[1]
 
-        ind_w2 = np.where(np.sum(n_dbw, axis=0) > 0)[0]
-        n_dbw = n_dbw[:, ind_w2]
+        n_dbw = n_dbw[:, np.any(n_dbw, axis=0)]
 
         # group-membership distributions
         p_tw_w = (n_wb / np.sum(n_wb, axis=1)[:, np.newaxis]).T
