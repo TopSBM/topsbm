@@ -76,8 +76,6 @@ class TopSBM(BaseEstimator):
     def __make_graph(self, X):
         num_samples = X.shape[0]
 
-        list_titles = ['Doc#%d' % h for h in range(num_samples)]
-
         # make a graph
         # create a graph
         g = Graph(directed=False)
@@ -94,8 +92,7 @@ class TopSBM(BaseEstimator):
 
         # add all documents first
         for i_d in range(num_samples):
-            title = list_titles[i_d]
-            docs_add[title]
+            docs_add[i_d]
 
         # add all documents and words as nodes
         # add all tokens as links
