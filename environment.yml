@@ -13,8 +13,6 @@ dependencies:
   - pygobject
   - cairo
   - gtk3
-# testing dependencies
-  - pytest
 # doc dependencies
   - sphinx
   - sphinx-gallery

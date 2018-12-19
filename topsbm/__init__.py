@@ -12,4 +12,4 @@ if not __IN_SETUP__:
     __all__ = ['TopSBM']
 
 
-__version__ = '0.1.dev1'
+__version__ = '0.1.dev2'
