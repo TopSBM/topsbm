@@ -97,3 +97,14 @@ def test_random_state(n_samples=20, n_features=100):
     Xt2 = TopSBM(random_state=2).fit_transform(X)
     np.testing.assert_allclose(Xt0a, Xt0b)
     assert Xt0a.shape != Xt2.shape or not np.allclose(Xt0a, Xt2)
+
+
+def test_min_max_groups(n_samples=200, n_features=1000):
+    feat = np.random.RandomState(0).choice(X_20n.shape[1], n_features)
+    X = X_20n[:n_samples, feat]
+    model1 = TopSBM(random_state=0).fit(X)
+    model2 = TopSBM(random_state=0, min_groups=10).fit(X)
+    model3 = TopSBM(random_state=0, max_groups=2).fit(X)
+    # TODO: more explicitly test the effect on the number of groups
+    assert not np.isclose(model1.mdl_, model2.mdl_)
+    assert not np.isclose(model1.mdl_, model3.mdl_)
