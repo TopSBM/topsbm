@@ -57,6 +57,8 @@ def test_trivial():
     assert np.allclose(Xt.sum(axis=1), 1)
     assert np.allclose(np.ptp(Xt, axis=1), 1)
 
+    # TODO: explore the effect of increasing topic overlap
+
 
 def test_n_init(n_samples=20, n_features=1000):
     feat = np.random.RandomState(0).choice(X_20n.shape[1], n_features)
