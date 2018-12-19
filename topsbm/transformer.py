@@ -266,7 +266,7 @@ class TopSBM(BaseEstimator):
             v2 = e.target()
             n_db[idx[v1], z1] += 1
             n_dbw[idx[v1], z2] += 1
-            n_wb[idx[v2] - D, z2] += 1
+            n_wb[idx[v2] - self.n_samples_, z2] += 1
 
         # p_w = np.sum(n_wb,axis=1) / float(np.sum(n_wb))
 
