@@ -103,6 +103,7 @@ def test_min_max_groups(n_samples=200, n_features=1000):
     feat = np.random.RandomState(0).choice(X_20n.shape[1], n_features)
     X = X_20n[:n_samples, feat]
     model1 = TopSBM(random_state=0).fit(X)
+    check_graph_structure(model1)
     model2 = TopSBM(random_state=0, min_groups=10).fit(X)
     model3 = TopSBM(random_state=0, max_groups=2).fit(X)
     # TODO: more explicitly test the effect on the number of groups
