@@ -36,7 +36,7 @@ class TopSBM(BaseEstimator):
     n_init : int, default=1
         Number of random initialisations to perform in order to avoid a local
         minimum of MDL. The minimum MDL solution is chosen.
-    min_groups : int, default=1
+    min_groups : int, default=None
         The minimum number of word and docuent groups to infer. This is also a
         lower bound on the number of topics.
     max_groups : int, default=None
@@ -74,7 +74,7 @@ class TopSBM(BaseEstimator):
     Science Advances (2018)
     """
 
-    def __init__(self, n_init=1, min_groups=1, max_groups=None,
+    def __init__(self, n_init=1, min_groups=None, max_groups=None,
                  weighted_edges=True, random_state=None):
 
         self.n_init = n_init
