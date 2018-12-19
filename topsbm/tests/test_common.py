@@ -48,8 +48,8 @@ def test_trivial():
     assert model.graph_ is not None
     assert model.state_ is not None
     assert model.mdl_ > 0
-    assert model.num_features_ == 1000
-    assert model.num_samples_ == 20
+    assert model.num_features_ == X.shape[1]
+    assert model.num_samples_ == X.shape[0]
 
     assert np.allclose(Xt.sum(axis=1), 1)
     assert np.allclose(np.ptp(Xt, axis=1), 1)
