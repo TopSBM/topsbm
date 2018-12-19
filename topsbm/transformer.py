@@ -71,13 +71,13 @@ class TopSBM(BaseEstimator):
         p_tw_d : array of shape (B_w, d)
             doc-topic mixtures:
             prob of word-group tw in doc d P(tw | d)
-        p_td_d : array of shape (B_d, D)
+        p_td_d : array of shape (B_d, n_samples)
             doc-group membership:
             prob that doc-node d belongs to doc-group td: P(td | d)
-        p_tw_w : array of shape (B_w, V)
+        p_tw_w : array of shape (B_w, n_features)
             word-group-membership:
             prob that word-node w belongs to word-group tw: P(tw | w)
-        p_w_tw : array of shape (V, B_w)
+        p_w_tw : array of shape (n_features, B_w)
             topic distribution:
             prob of word w given topic tw P(w | tw)
 
