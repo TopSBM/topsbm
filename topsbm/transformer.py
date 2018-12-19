@@ -49,16 +49,37 @@ class TopSBM(BaseEstimator):
     ----------
     graph_ : graph_tool.Graph
         Bipartite graph between samples (kind=0) and features (kind=1)
-    num_features_ : int
-    num_samples_ : int
     state_
-         Inference state from graphtool
-    groups_
-        results of group membership from inference
+        Inference state from graphtool
+    n_levels_ : int
+        The number of levels in the inferred hierarchy of groups.
+    groups_ : dict
+        Results of group membership from inference.
+        Key is an integer, indicating the level of grouping (starting from 0).
+        Value is a dict of information about the grouping which contains:
 
-        # TODO: document structure and semantics of this
+        B_d : int
+            number of doc-groups
+        B_w : int
+            number of word-groups
+        p_tw_d : array of shape (B_w, d)
+            doc-topic mixtures:
+            prob of word-group tw in doc d P(tw | d)
+        p_td_d : array of shape (B_d, D)
+            doc-group membership:
+            prob that doc-node d belongs to doc-group td: P(td | d)
+        p_tw_w : array of shape (B_w, V)
+            word-group-membership:
+            prob that word-node w belongs to word-group tw: P(tw | w)
+        p_w_tw : array of shape (V, B_w)
+            topic distribution:
+            prob of word w given topic tw P(w | tw)
+
+        Here "d"/document refers to samples; "w"/word refers to features.
     mdl_
         minimum description length of inferred state
+    n_features_ : int
+    n_samples_ : int
 
     References
     ----------
@@ -79,10 +100,8 @@ class TopSBM(BaseEstimator):
         list_titles = ['Doc#%d' % h for h in range(num_samples)]
 
         # make a graph
-        # create a graph
         g = Graph(directed=False)
         # define node properties
-        # name: docs - title, words - 'word'
         # kind: docs - 0, words - 1
         idx = g.vp["idx"] = g.new_vp("int")
         kind = g.vp["kind"] = g.new_vp("int")
@@ -139,22 +158,19 @@ class TopSBM(BaseEstimator):
                 del state
 
         # collect group membership for each level in the hierarchy
-        L = len(self.state_.levels)
-        dict_groups_L = {}
+        n_levels = len(self.state_.levels)
 
-        # only trivial bipartite structure
-        if L == 2:
-            self.L_ = 1
-            for l in range(L - 1):
-                dict_groups_l = self.__get_groups(l=l)
-                dict_groups_L[l] = dict_groups_l
-        # omit trivial levels: l=L-1 (single group), l=L-2 (bipartite)
+        if n_levels == 2:
+            # only trivial bipartite structure
+            self.groups_ = {0: self.__get_groups(level=0)}
         else:
-            self.L_ = L - 2
-            for l in range(L - 2):
-                dict_groups_l = self.__get_groups(l=l)
-                dict_groups_L[l] = dict_groups_l
-        self.groups_ = dict_groups_L
+            # omit trivial levels:
+            # - l=n_levels-1 (single group),
+            # - l=n_levels-2 (bipartite)
+            self.groups_ = {l: self.__get_groups(level=l)
+                            for l in range(n_levels - 2)}
+
+        self.n_levels_ = len(self.groups_)
 
     def fit(self, X, y=None):
         """Fit the hSBM topic model
@@ -203,8 +219,8 @@ class TopSBM(BaseEstimator):
 
         try:
             self.graph_ = self.__make_graph(X)
-            self.num_features_ = X.shape[1]
-            self.num_samples_ = X.shape[0]
+            self.n_features_ = X.shape[1]
+            self.n_samples_ = X.shape[0]
 
             self.__fit_hsbm()
         finally:
@@ -213,50 +229,26 @@ class TopSBM(BaseEstimator):
         l = 0
         Xt = self.groups_[l]['p_tw_d'].T
 
-        '''
-        np.zeros(self.num_samples_, self.groups_[l]['Bw'])
-        dict_groups =  self.groups_[l]
-        for doc_index in range(self.num_samples_):
-            p_tw_d = dict_groups['p_tw_d']
-            list_topics_tw = []
-            for tw, p_tw in enumerate(p_tw_d[:,doc_index]):
-                    list_topics_tw += [(tw, p_tw)]
-        '''
         self.num_components_ = Xt
         return Xt
 
-    def __get_groups(self, l=0):
+    def __get_groups(self, level=0):
         '''extract group membership statistics from the inferred state.
 
-        return dictionary
-        - B_d, int, number of doc-groups
-        - B_w, int, number of word-groups
-        - p_tw_w, array B_w x V; word-group-membership:
-         prob that word-node w belongs to word-group tw: P(tw | w)
-        - p_td_d, array B_d x D; doc-group membership:
-         prob that doc-node d belongs to doc-group td: P(td | d)
-        - p_w_tw, array V x B_w; topic distribution:
-         prob of word w given topic tw P(w | tw)
-        - p_tw_d, array B_w x d; doc-topic mixtures:
-         prob of word-group tw in doc d P(tw | d)
+        return dict
         '''
-        V = self.num_features_
-        D = self.num_samples_
-
-        g = self.graph_
-        state = self.state_
-        idx = g.vp["idx"]
-        state_l = state.project_level(l).copy(overlap=True)
-        state_l_edges = state_l.get_edge_blocks()
+        level_state = self.state_.project_level(level).copy(overlap=True)
+        level_state_edges = level_state.get_edge_blocks()
 
         # count labeled half-edges, group-memberships
-        B = state_l.B
-        n_wb = np.zeros((V, B))
-        n_db = np.zeros((D, B))
-        n_dbw = np.zeros((D, B))
+        n_groups = level_state.B
+        n_wb = np.zeros((self.n_features_, n_groups))
+        n_db = np.zeros((self.n_samples_, n_groups))
+        n_dbw = np.zeros((self.n_samples_, n_groups))
 
-        for e in g.edges():
-            z1, z2 = state_l_edges[e]
+        idx = self.graph_.vp["idx"]
+        for e in self.graph_.edges():
+            z1, z2 = level_state_edges[e]
             v1 = e.source()
             v2 = e.target()
             n_db[idx[v1], z1] += 1
