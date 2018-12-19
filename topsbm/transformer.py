@@ -274,7 +274,7 @@ class TopSBM(BaseEstimator):
             v2 = e.target()
             n_db[idx[v1], z1] += 1
             n_dbw[idx[v1], z2] += 1
-            n_wb[idx[v2], z2] += 1
+            n_wb[idx[v2] - D, z2] += 1
 
         # p_w = np.sum(n_wb,axis=1) / float(np.sum(n_wb))
 
@@ -307,7 +307,7 @@ class TopSBM(BaseEstimator):
         result['p_tw_w'] = p_tw_w
         result['p_td_d'] = p_td_d
         result['p_w_tw'] = p_w_tw
-        result['p_tw_d'] = p_tw_d  # XXX: this appears to be 1-p_td_d
+        result['p_tw_d'] = p_tw_d
 
         return result
 
