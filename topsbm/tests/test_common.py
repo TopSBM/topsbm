@@ -63,6 +63,8 @@ def test_trivial():
     # assert len(np.unique(Xt[:20], axis=1)) == 1
     # assert len(np.unique(Xt[20:], axis=1)) == 1
 
+    # TODO: also test other outputs in groups_
+
     # TODO: explore the effect of increasing topic overlap
 
 
