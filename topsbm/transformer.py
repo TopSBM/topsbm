@@ -54,7 +54,8 @@ class TopSBM(BaseEstimator):
     Attributes
     ----------
     graph_ : graph_tool.Graph
-        Bipartite graph between samples (kind=0) and features (kind=1)
+        Bipartite graph between samples (the first `n_samples_` vertices) and
+        features (the remaining vertices)
     state_
         Inference state from graphtool
     n_levels_ : int
@@ -112,7 +113,6 @@ class TopSBM(BaseEstimator):
         g = Graph(directed=False)
         # define node properties
         # kind: docs - 0, words - 1
-        idx = g.vp["idx"] = g.new_vp("int")
         kind = g.vp["kind"] = g.new_vp("int")
         if self.weighted_edges:
             ecount = g.ep["count"] = g.new_ep("int")
@@ -126,12 +126,10 @@ class TopSBM(BaseEstimator):
         X = scipy.sparse.coo_matrix(X)
         for row, col, count in zip(X.row, X.col, X.data):
             doc_vert = doc_vertices[row]
-            idx[doc_vert] = row
             kind[doc_vert] = 0
 
             word_vert = word_vertices[col]
 
-            idx[word_vert] = col
             kind[word_vert] = 1
             if self.weighted_edges:
                 e = g.add_edge(doc_vert, word_vert)
@@ -253,27 +251,23 @@ class TopSBM(BaseEstimator):
         n_db = np.zeros((self.n_samples_, n_groups))
         n_dbw = np.zeros((self.n_samples_, n_groups))
 
-        idx = self.graph_.vp["idx"]
         for e in self.graph_.edges():
             z1, z2 = level_state_edges[e]
-            v1 = e.source()
-            v2 = e.target()
-            n_db[idx[v1], z1] += 1
-            n_dbw[idx[v1], z2] += 1
-            n_wb[idx[v2], z2] += 1
+            v1 = int(e.source())
+            v2 = int(e.target())
+            n_db[v1, z1] += 1
+            n_dbw[v1, z2] += 1
+            n_wb[v2 - self.n_samples_, z2] += 1
 
         # p_w = np.sum(n_wb,axis=1) / float(np.sum(n_wb))
 
-        ind_d = np.where(np.sum(n_db, axis=0) > 0)[0]
-        Bd = len(ind_d)
-        n_db = n_db[:, ind_d]
+        n_db = n_db[:, np.any(n_db, axis=0)]
+        Bd = n_db.shape[1]
 
-        ind_w = np.where(np.sum(n_wb, axis=0) > 0)[0]
-        Bw = len(ind_w)
-        n_wb = n_wb[:, ind_w]
+        n_wb = n_wb[:, np.any(n_wb, axis=0)]
+        Bw = n_wb.shape[1]
 
-        ind_w2 = np.where(np.sum(n_dbw, axis=0) > 0)[0]
-        n_dbw = n_dbw[:, ind_w2]
+        n_dbw = n_dbw[:, np.any(n_dbw, axis=0)]
 
         # group-membership distributions
         p_tw_w = (n_wb / np.sum(n_wb, axis=1)[:, np.newaxis]).T
@@ -293,7 +287,7 @@ class TopSBM(BaseEstimator):
         result['p_tw_w'] = p_tw_w
         result['p_td_d'] = p_td_d
         result['p_w_tw'] = p_w_tw
-        result['p_tw_d'] = p_tw_d  # XXX: this appears to be 1-p_td_d
+        result['p_tw_d'] = p_tw_d
 
         return result
 
