@@ -144,7 +144,13 @@ html_theme_path = [themedir]
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
-#html_theme_options = {}
+html_theme_options = {
+    "edit_link": False,
+    "sidebar": "left",
+    "scipy_org_logo": False,
+    "rootlinks": []
+}
+html_sidebars = {}
 
 
 # The name for this set of Sphinx documents.  If None, it defaults to
