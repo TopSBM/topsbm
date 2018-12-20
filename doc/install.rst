@@ -18,13 +18,13 @@ or by cloning the source code::
 Installing dependencies
 .......................
 
-topsbm requires `graph_tool <https://graph-tool.skewed.de/>`_ to already be
+topsbm requires `graph-tool <https://graph-tool.skewed.de/>`_ to already be
 installed, as it cannot be installed with `pip`.
 
-A simple way to install graph_tool and its dependencies is to use `conda
+A simple way to install graph-tool and its dependencies is to use `conda
 <https://repo.continuum.io/miniconda>`_::
 
-    $ conda install -c conda-forge -c flyem-forge scikit-learn graph_tool pygobject cairo gtk3
+    $ conda install -c conda-forge -c flyem-forge scikit-learn graph-tool pygobject cairo gtk3
 
 or simply::
 
