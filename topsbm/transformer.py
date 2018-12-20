@@ -54,7 +54,8 @@ class TopSBM(BaseEstimator):
     Attributes
     ----------
     graph_ : graph_tool.Graph
-        Bipartite graph between samples (kind=0) and features (kind=1)
+        Bipartite graph between samples (the first `n_samples_` vertices) and
+        features (the remaining vertices)
     state_
         Inference state from graphtool
     n_levels_ : int
