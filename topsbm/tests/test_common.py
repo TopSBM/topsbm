@@ -46,7 +46,7 @@ def test_trivial():
     # two populations of samples with non-overlapping feature spaces
     X[:10, :8] = 1
     X[10:, 8:] = 1
-    model = TopSBM(n_init=10)
+    model = TopSBM()
     Xt = model.fit_transform(X)
 
     print(Xt)
