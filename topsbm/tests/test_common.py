@@ -42,10 +42,10 @@ def check_graph_structure(model):
 
 
 def test_trivial():
-    X = np.zeros((20, 2))
+    X = np.zeros((20, 10))
     # two populations of samples with non-overlapping feature spaces
-    X[:10, :1] = 1
-    X[10:, 1:] = 1
+    X[:10, :8] = 1
+    X[10:, 8:] = 1
     model = TopSBM(n_init=10)
     Xt = model.fit_transform(X)
 
