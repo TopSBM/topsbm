@@ -30,10 +30,51 @@ bunch_20n = fetch_20newsgroups(categories=['alt.atheism',
 X_20n = CountVectorizer().fit_transform(bunch_20n.data)
 
 
-def test_transformer():
+def test_common():
     return check_estimator(TopSBM)
 
 
+def check_graph_structure(model):
+    n_vertices = model.n_samples_ + model.n_features_
+    for e in model.graph_.edges():
+        assert model.n_samples_ > e.source() >= 0
+        assert n_vertices > e.target() >= model.n_samples_
+
+
+def test_trivial():
+    X = np.zeros((20, 10))
+    # two populations of samples with non-overlapping feature spaces
+    X[:10, :8] = 1
+    X[10:, 8:] = 1
+    model = TopSBM(random_state=0)
+    Xt = model.fit_transform(X)
+
+    print(Xt)
+    print(model.groups_)
+
+    check_graph_structure(model)
+    assert model.state_ is not None
+    assert model.mdl_ > 0
+    assert model.n_features_ == X.shape[1]
+    assert model.n_samples_ == X.shape[0]
+
+    # rows sum to 1
+    assert np.allclose(Xt.sum(axis=1), 1)
+    # rows consist of 0 and 1
+    assert np.allclose(np.ptp(Xt, axis=1), 1)
+    # There should be no topical overlap between the two populations
+    tuples = [tuple(row) for row in Xt]
+    assert not set(tuples[:10]) & set(tuples[10:])
+
+    # more specifically:
+    assert Xt.shape == (20, 2)
+
+    # TODO: also test other outputs in groups_
+
+    # TODO: explore the effect of increasing topic overlap
+
+
+@pytest.mark.xfail
 def test_n_init(n_samples=20, n_features=1000):
     feat = np.random.RandomState(0).choice(X_20n.shape[1], n_features)
     X = X_20n[:n_samples, feat]
@@ -62,6 +103,7 @@ def test_min_max_groups(n_samples=200, n_features=1000):
     feat = np.random.RandomState(0).choice(X_20n.shape[1], n_features)
     X = X_20n[:n_samples, feat]
     model1 = TopSBM(random_state=0).fit(X)
+    check_graph_structure(model1)
     model2 = TopSBM(random_state=0, min_groups=10).fit(X)
     model3 = TopSBM(random_state=0, max_groups=2).fit(X)
     # TODO: more explicitly test the effect on the number of groups
