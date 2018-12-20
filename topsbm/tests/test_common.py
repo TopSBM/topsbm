@@ -52,7 +52,7 @@ def test_trivial():
     print(Xt)
     print(model.groups_)
 
-    check_graph_structure(model.graph_)
+    check_graph_structure(model)
     assert model.state_ is not None
     assert model.mdl_ > 0
     assert model.num_features_ == X.shape[1]
@@ -68,7 +68,6 @@ def test_trivial():
 
     # more specifically:
     assert Xt.shape == (20, 2)
-    assert len(np.unique(Xt, axis=1)) == 2
 
     # TODO: also test other outputs in groups_
 
