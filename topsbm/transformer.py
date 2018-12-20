@@ -114,7 +114,6 @@ class TopSBM(BaseEstimator):
         g = Graph(directed=False)
         # define node properties
         # kind: docs - 0, words - 1
-        idx = g.vp["idx"] = g.new_vp("int")
         kind = g.vp["kind"] = g.new_vp("int")
         if self.weighted_edges:
             ecount = g.ep["count"] = g.new_ep("int")
@@ -132,12 +131,10 @@ class TopSBM(BaseEstimator):
         X = scipy.sparse.coo_matrix(X)
         for row, col, count in zip(X.row, X.col, X.data):
             doc_vert = docs_add[row]
-            idx[doc_vert] = row
             kind[doc_vert] = 0
 
             word_vert = words_add[col]
 
-            idx[word_vert] = col
             kind[word_vert] = 1
             if self.weighted_edges:
                 e = g.add_edge(doc_vert, word_vert)
@@ -259,14 +256,13 @@ class TopSBM(BaseEstimator):
         n_db = np.zeros((self.n_samples_, n_groups))
         n_dbw = np.zeros((self.n_samples_, n_groups))
 
-        idx = self.graph_.vp["idx"]
         for e in self.graph_.edges():
             z1, z2 = level_state_edges[e]
-            v1 = e.source()
-            v2 = e.target()
-            n_db[idx[v1], z1] += 1
-            n_dbw[idx[v1], z2] += 1
-            n_wb[idx[v2] - self.n_samples_, z2] += 1
+            v1 = int(e.source())
+            v2 = int(e.target())
+            n_db[v1, z1] += 1
+            n_dbw[v1, z2] += 1
+            n_wb[v2 - self.n_samples_, z2] += 1
 
         # p_w = np.sum(n_wb,axis=1) / float(np.sum(n_wb))
 
