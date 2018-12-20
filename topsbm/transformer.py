@@ -124,6 +124,14 @@ class TopSBM(BaseEstimator):
         # add all documents and words as nodes
         # add all tokens as links
         X = scipy.sparse.coo_matrix(X)
+
+        if not self.weighted_edges and X.dtype != int:
+            X_int = X.astype(int)
+            if not np.allclose(X.data, X_int.data):
+                raise ValueError('Data must be integer if '
+                                 'weighted_edges=False')
+            X = X_int
+
         for row, col, count in zip(X.row, X.col, X.data):
             doc_vert = doc_vertices[row]
             kind[doc_vert] = 0
