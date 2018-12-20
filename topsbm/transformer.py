@@ -117,12 +117,9 @@ class TopSBM(BaseEstimator):
         if self.weighted_edges:
             ecount = g.ep["count"] = g.new_ep("int")
 
-        doc_vertices = defaultdict(lambda: g.add_vertex())
-        word_vertices = defaultdict(lambda: g.add_vertex())
-
         # add all documents first
-        for i_d in range(num_samples):
-            doc_vertices[i_d]
+        doc_vertices = [g.add_vertex() for _ in range(num_samples)]
+        word_vertices = defaultdict(lambda: g.add_vertex())
 
         # add all documents and words as nodes
         # add all tokens as links
