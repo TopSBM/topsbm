@@ -127,10 +127,9 @@ class TopSBM(BaseEstimator):
         for row, col, count in zip(X.row, X.col, X.data):
             doc_vert = doc_vertices[row]
             kind[doc_vert] = 0
-
             word_vert = word_vertices[col]
-
             kind[word_vert] = 1
+
             if self.weighted_edges:
                 e = g.add_edge(doc_vert, word_vert)
                 ecount[e] = count
