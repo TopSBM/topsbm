@@ -41,16 +41,15 @@ def check_graph_structure(model):
         assert n_vertices > e.target() >= model.n_samples_
 
 
-def test_trivial():
+@pytest.mark.parametrize('weighted_edges', [True, False])
+def test_trivial(weighted_edges):
     X = np.zeros((20, 10))
     # two populations of samples with non-overlapping feature spaces
     X[:10, :8] = 1
+    X[:10, 0] = 2
     X[10:, 8:] = 1
-    model = TopSBM(random_state=0)
+    model = TopSBM(random_state=0, weighted_edges=weighted_edges)
     Xt = model.fit_transform(X)
-
-    print(Xt)
-    print(model.groups_)
 
     check_graph_structure(model)
     assert model.state_ is not None
