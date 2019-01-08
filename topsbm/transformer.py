@@ -290,18 +290,16 @@ class TopSBM(BaseEstimator):
 
         return result
 
-    def plot_graph(self, filename, n_edges=1000):
+    def plot_graph(self, filename=None, n_edges=1000):
         """Plots arcs from documents to words coloured according to inferred groups
 
         Parameters
         ----------
+        filename : str, optional
+            Path to write to (e.g. 'something.png').
+            Otherwise returns a displayable object.
         n_edges : int
-            ???
-
-        Returns
-        -------
-        ax : matplotlib.axes.Axes
-            An axes with the plot on it
+            Size of subsample to plot (reducing memory requirements)
         """
         self.state_.draw(layout='bipartite', output=filename,
                          subsample_edges=n_edges, hshortcuts=1, hide=0)
