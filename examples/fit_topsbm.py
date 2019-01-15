@@ -39,7 +39,7 @@ print(docs[i_doc][:100])
 
 # Fit the model
 
-model = TopSBM()
+model = TopSBM(random_state=9)  # 9 happens to give a neat clustering
 Xt = model.fit_transform(X)
 
 model.plot_graph("model-decomposition.png")
