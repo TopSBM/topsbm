@@ -44,8 +44,7 @@ extensions = [
     'numpydoc',
     'sphinx.ext.ifconfig',
     'sphinx.ext.viewcode',
-    'sphinx_gallery.gen_gallery'
-
+    'nbsphinx',
 ]
 
 # pngmath / imgmath compatibility layer for different sphinx versions
