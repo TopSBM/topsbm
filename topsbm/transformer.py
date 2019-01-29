@@ -107,8 +107,6 @@ class TopSBM(BaseEstimator):
         self.random_state = random_state
 
     def __make_graph(self, X):
-        num_samples = X.shape[0]
-
         # make a graph
         g = Graph(directed=False)
         # define node properties
@@ -118,8 +116,8 @@ class TopSBM(BaseEstimator):
             ecount = g.ep["count"] = g.new_ep("int")
 
         # add all documents first
-        doc_vertices = [g.add_vertex() for _ in range(num_samples)]
-        word_vertices = defaultdict(lambda: g.add_vertex())
+        doc_vertices = [g.add_vertex() for _ in range(X.shape[0])]
+        word_vertices = [g.add_vertex() for _ in range(X.shape[1])]
 
         # add all documents and words as nodes
         # add all tokens as links
