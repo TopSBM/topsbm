@@ -5,7 +5,7 @@
 
    install
    api
-   auto_examples/index
+   examples/example
 
 * :ref:`genindex`
 
