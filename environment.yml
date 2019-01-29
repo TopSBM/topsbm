@@ -18,3 +18,4 @@ dependencies:
   - sphinx-gallery
   - numpydoc
   - nbsphinx
+  - ipython  # for code highlighting in nbsphinx apparently!
