@@ -173,10 +173,10 @@ class TopSBM(BaseEstimator):
             self.groups_ = {0: self.__get_groups(level=0)}
         else:
             # omit trivial levels:
-            # - l=n_levels-1 (single group),
-            # - l=n_levels-2 (bipartite)
-            self.groups_ = {l: self.__get_groups(level=l)
-                            for l in range(n_levels - 2)}
+            # - level=n_levels-1 (single group),
+            # - level=n_levels-2 (bipartite)
+            self.groups_ = {level: self.__get_groups(level=level)
+                            for level in range(n_levels - 2)}
 
         self.n_levels_ = len(self.groups_)
 
@@ -234,8 +234,8 @@ class TopSBM(BaseEstimator):
         finally:
             np.random.set_state(np_random_state)
 
-        l = 0
-        Xt = self.groups_[l]['p_tw_d'].T
+        level = 0
+        Xt = self.groups_[level]['p_tw_d'].T
 
         self.num_components_ = Xt
         return Xt
@@ -295,7 +295,7 @@ class TopSBM(BaseEstimator):
         return result
 
     def plot_graph(self, filename=None, n_edges=1000):
-        """Plots arcs from documents to words coloured according to inferred groups
+        """Plots arcs from documents to words coloured by inferred group
 
         Parameters
         ----------
