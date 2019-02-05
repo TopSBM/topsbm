@@ -34,11 +34,28 @@ def test_common():
     return check_estimator(TopSBM)
 
 
-def check_graph_structure(model):
+def check_graph_structure(X, model):
     n_vertices = model.n_samples_ + model.n_features_
     for e in model.graph_.edges():
         assert model.n_samples_ > e.source() >= 0
         assert n_vertices > e.target() >= model.n_samples_
+
+    if model.weighted_edges:
+        expected_feature_degree = (X > 0).sum(axis=0)
+        expected_sample_degree = (X > 0).sum(axis=1)
+    else:
+        expected_feature_degree = X.sum(axis=0)
+        expected_sample_degree = X.sum(axis=1)
+    # in case of sparse:
+    expected_sample_degree = np.asarray(expected_sample_degree).ravel()
+    expected_feature_degree = np.asarray(expected_feature_degree).ravel()
+
+    for i, v in enumerate(model.graph_.vertices()):
+        # Check vertices are aligned with features
+        if i < model.n_samples_:
+            assert v.out_degree() == expected_sample_degree[i]
+        else:
+            assert v.out_degree() == expected_feature_degree[i - model.n_samples_]
 
 
 @pytest.mark.parametrize('weighted_edges', [True, False])
@@ -51,7 +68,7 @@ def test_trivial(weighted_edges):
     model = TopSBM(random_state=0, weighted_edges=weighted_edges)
     Xt = model.fit_transform(X)
 
-    check_graph_structure(model)
+    check_graph_structure(X, model)
     assert model.state_ is not None
     assert model.mdl_ > 0
     assert model.n_features_ == X.shape[1]
@@ -98,11 +115,11 @@ def test_random_state(n_samples=20, n_features=100):
     assert Xt0a.shape != Xt2.shape or not np.allclose(Xt0a, Xt2)
 
 
-def test_min_max_groups(n_samples=200, n_features=1000):
+def test_min_max_groups(n_samples=300, n_features=1000):
     feat = np.random.RandomState(0).choice(X_20n.shape[1], n_features)
     X = X_20n[:n_samples, feat]
     model1 = TopSBM(random_state=0).fit(X)
-    check_graph_structure(model1)
+    check_graph_structure(X, model1)
     model2 = TopSBM(random_state=0, min_groups=10).fit(X)
     model3 = TopSBM(random_state=0, max_groups=2).fit(X)
     # TODO: more explicitly test the effect on the number of groups
