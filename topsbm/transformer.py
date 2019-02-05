@@ -17,8 +17,6 @@ This contains the hSBM topic modelling transformer, TopSBM
 # You should have received a copy of the GNU General Public License
 # along with TopSBM.  If not, see <https://www.gnu.org/licenses/>.
 
-from collections import defaultdict
-
 import numpy as np
 import graph_tool
 from graph_tool import Graph
@@ -107,8 +105,6 @@ class TopSBM(BaseEstimator):
         self.random_state = random_state
 
     def __make_graph(self, X):
-        num_samples = X.shape[0]
-
         # make a graph
         g = Graph(directed=False)
         # define node properties
@@ -118,8 +114,8 @@ class TopSBM(BaseEstimator):
             ecount = g.ep["count"] = g.new_ep("int")
 
         # add all documents first
-        doc_vertices = [g.add_vertex() for _ in range(num_samples)]
-        word_vertices = defaultdict(lambda: g.add_vertex())
+        doc_vertices = [g.add_vertex() for _ in range(X.shape[0])]
+        word_vertices = [g.add_vertex() for _ in range(X.shape[1])]
 
         # add all documents and words as nodes
         # add all tokens as links
@@ -177,10 +173,10 @@ class TopSBM(BaseEstimator):
             self.groups_ = {0: self.__get_groups(level=0)}
         else:
             # omit trivial levels:
-            # - l=n_levels-1 (single group),
-            # - l=n_levels-2 (bipartite)
-            self.groups_ = {l: self.__get_groups(level=l)
-                            for l in range(n_levels - 2)}
+            # - level=n_levels-1 (single group),
+            # - level=n_levels-2 (bipartite)
+            self.groups_ = {level: self.__get_groups(level=level)
+                            for level in range(n_levels - 2)}
 
         self.n_levels_ = len(self.groups_)
 
@@ -238,8 +234,8 @@ class TopSBM(BaseEstimator):
         finally:
             np.random.set_state(np_random_state)
 
-        l = 0
-        Xt = self.groups_[l]['p_tw_d'].T
+        level = 0
+        Xt = self.groups_[level]['p_tw_d'].T
 
         self.num_components_ = Xt
         return Xt
@@ -299,7 +295,7 @@ class TopSBM(BaseEstimator):
         return result
 
     def plot_graph(self, filename=None, n_edges=1000):
-        """Plots arcs from documents to words coloured according to inferred groups
+        """Plots arcs from documents to words coloured by inferred group
 
         Parameters
         ----------
