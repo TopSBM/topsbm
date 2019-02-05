@@ -17,8 +17,6 @@ This contains the hSBM topic modelling transformer, TopSBM
 # You should have received a copy of the GNU General Public License
 # along with TopSBM.  If not, see <https://www.gnu.org/licenses/>.
 
-from collections import defaultdict
-
 import numpy as np
 import graph_tool
 from graph_tool import Graph

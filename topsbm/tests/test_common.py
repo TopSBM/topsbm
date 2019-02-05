@@ -55,7 +55,8 @@ def check_graph_structure(X, model):
         if i < model.n_samples_:
             assert v.out_degree() == expected_sample_degree[i]
         else:
-            assert v.out_degree() == expected_feature_degree[i - model.n_samples_]
+            assert (v.out_degree() ==
+                    expected_feature_degree[i - model.n_samples_])
 
 
 @pytest.mark.parametrize('weighted_edges', [True, False])
