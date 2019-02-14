@@ -6,6 +6,7 @@
    install
    api
    examples/example
+   maintainers
 
 * :ref:`genindex`
 
