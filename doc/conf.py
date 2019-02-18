@@ -82,6 +82,7 @@ project = u'topsbm'
 # |version| and |release|, also used in various other places throughout the
 # built documents.
 #
+import __builtin__ as builtins
 builtins.__IN_SETUP__ = True
 import topsbm  # does not import estimator due to builtins hack
 delattr(builtins, '__IN_SETUP__')
