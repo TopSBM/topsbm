@@ -7,11 +7,11 @@ The latest release can be installed from PyPi using::
 
 Install the development version from GitHub using::
 
-    $ pip install https://github.com/Sydney-Informatics-Hub/topsbm/archive/master.zip
+    $ pip install https://github.com/TopSBM/topsbm/archive/master.zip
 
 or by cloning the source code::
 
-    $ git clone https://github.com/Sydney-Informatics-Hub/topsbm
+    $ git clone https://github.com/TopSBM/topsbm
     $ cd topsbm
     $ pip install .
 
@@ -28,7 +28,7 @@ A simple way to install graph-tool and its dependencies is to use `conda
 
 or simply::
 
-    $ git clone https://github.com/Sydney-Informatics-Hub/topsbm
+    $ git clone https://github.com/TopSBM/topsbm
     $ cd topsbm
     $ conda env create
 

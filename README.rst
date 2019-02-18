@@ -17,18 +17,18 @@ Software ported to Scikit-learn format by the `Sydney Informatics Hub <https://i
     :alt: Latest version on PyPi
     :target: https://badge.fury.io/py/topsbm
 
-.. |build| image:: https://travis-ci.org/Sydney-Informatics-Hub/topsbm.svg?branch=master
+.. |build| image:: https://travis-ci.org/TopSBM/topsbm.svg?branch=master
     :alt: Travis CI build status
     :scale: 100%
-    :target: https://travis-ci.org/Sydney-Informatics-Hub/topsbm
+    :target: https://travis-ci.org/TopSBM/topsbm
 
-.. |issues| image:: https://img.shields.io/github/issues/Sydney-Informatics-Hub/topsbm.svg
+.. |issues| image:: https://img.shields.io/github/issues/TopSBM/topsbm.svg
     :alt: Issue tracker
-    :target: https://github.com/Sydney-Informatics-Hub/topsbm
+    :target: https://github.com/TopSBM/topsbm
 
-.. |coverage| image:: https://coveralls.io/repos/github/Sydney-Informatics-Hub/topsbm/badge.svg
+.. |coverage| image:: https://coveralls.io/repos/github/TopSBM/topsbm/badge.svg
     :alt: Test coverage
-    :target: https://coveralls.io/github/Sydney-Informatics-Hub/topsbm
+    :target: https://coveralls.io/github/TopSBM/topsbm
 
 .. |docs| image:: https://readthedocs.org/projects/topsbm/badge/?version=latest
      :alt: Documentation Status

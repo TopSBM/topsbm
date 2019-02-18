@@ -2,7 +2,7 @@ Maintaining the Package
 =======================
 
 This document contains information for the software developers and maintainers.
-Issues can be posted at `https://github.com/Sydney-Informatics-Hub/topsbm/issues`_.
+Issues can be posted at `https://github.com/TopSBM/topsbm/issues`_.
 
 Travis CI
 ---------
@@ -44,7 +44,7 @@ make sure that you are authorised to maintain the `PyPI package
 Then follow these steps:
 
 1. Make sure the version is correct in the ``__version__`` variable in
-   [``topsbm/__init__.py``](https://github.com/Sydney-Informatics-Hub/topsbm/blob/master/topsbm/__init__.py).
+   [``topsbm/__init__.py``](https://github.com/TopSBM/topsbm/blob/master/topsbm/__init__.py).
    For releases, remove suffixes like ``dev0``. Commit that change.
 2. Tag the commit with the version number, with a command such as ``git tag v0.2``.
 3. Push the tags to github. ``git push --tags``
@@ -53,4 +53,4 @@ Then follow these steps:
 5. Run ``python setup.py sdist`` to create new entries in ``dist/``
 6. Ensure your PyPI credentials are stored in ``~/.pypirc``.
 7. Run ``twine upload dist/*.tar.gz``.
-8. If you want, create a corresponding `GitHub release <https://github.com/Sydney-Informatics-Hub/topsbm/releases>`__
+8. If you want, create a corresponding `GitHub release <https://github.com/TopSBM/topsbm/releases>`__
