@@ -82,7 +82,9 @@ project = u'topsbm'
 # |version| and |release|, also used in various other places throughout the
 # built documents.
 #
-import topsbm
+builtins.__IN_SETUP__ = True
+import topsbm  # does not import estimator due to builtins hack
+delattr(builtins, '__IN_SETUP__')
 # The short X.Y version.
 version = topsbm.__version__
 # The full version, including alpha/beta/rc tags.
