@@ -1,0 +1,10 @@
+name: topsbm
+channels:
+  - conda-forge
+dependencies:
+  - python=3.*
+  - sphinx
+  - sphinx-gallery
+  - numpydoc
+  - nbsphinx
+  - ipython  # for code highlighting in nbsphinx apparently!
