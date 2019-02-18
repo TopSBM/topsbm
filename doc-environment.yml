@@ -3,6 +3,7 @@ channels:
   - conda-forge
 dependencies:
   - python=3.*
+  - scipy
   - sphinx
   - sphinx-gallery
   - numpydoc
